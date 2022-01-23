@@ -5,12 +5,13 @@ Menu::InitialScreen() {
     std::cout << "Welcome to Snake Game" << std::endl;
     AskName();
     AskDifficultyLevel();
-    CheckIfQuit();
     return;
 }
 Menu::FinalScreen() {
+    std::cout << "Game has terminated successfully!" <<std::endl;
+    std::cout << userName << "has made " << game.GetScore() << "Score with the Size of " 
+        << game.GetSize() << std::endl;
     AskDifficultyLevel();
-    CheckIfQuit();
     return;
 }
 
@@ -53,6 +54,8 @@ Menu::AskDifficultyLevel() {
     }
 }
 
-void Menu::CheckIfQuit() {
-    return;
+int Menu::CheckIfQuit() {
+    if(ifQuit == 1)
+        return 1;
+    return 0;
 }
