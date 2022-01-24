@@ -9,7 +9,7 @@ void Controller::ChangeDirection(Snake &snake, Snake::Direction input,
   return;
 }
 
-void Controller::HandleInput(bool &running, Snake &snake) const {
+int Controller::HandleInput(bool &running, Snake &snake) const {
   SDL_Event e;
   while (SDL_PollEvent(&e)) {
     if (e.type == SDL_QUIT) {
@@ -36,7 +36,7 @@ void Controller::HandleInput(bool &running, Snake &snake) const {
                           Snake::Direction::kLeft);
           break;
         case SDLK_ESCAPE:
-          exit(0);
+          return 1;
           break;
       }
     }
