@@ -36,7 +36,7 @@ int Controller::HandleInput(bool &running, Snake &snake) const {
                           Snake::Direction::kLeft);
           break;
         case SDLK_ESCAPE:
-          return 1;
+          return (1);
           break;
       }
     }
