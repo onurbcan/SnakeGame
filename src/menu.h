@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include "game.h"
 
 enum Difficulties {
     Quit, Easy, Medium, Hard
@@ -11,7 +12,7 @@ enum Difficulties {
 class Menu {
     public:
         void InitialScreen();
-        void FinalScreen();
+        void FinalScreen(Game &game);
         int CheckIfQuit();
 
     private:

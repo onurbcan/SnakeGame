@@ -13,15 +13,17 @@ int main() {
   constexpr std::size_t kGridHeight{32};
 
   Menu menu;
+  menu.InitialScreen();
+  if(menu.CheckIfQuit()) {
+    std::cout << "Game has terminated successfully!" <<std::endl;
+    return 0;
+  }
   while(true) {
-    menu.InitialScreen();
-    if(menu.CheckIfQuit())
-      break;
     Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
     Controller controller;
     Game game(kGridWidth, kGridHeight);
     game.Run(controller, renderer, kMsPerFrame);
-    menu.FinalScreen();
+    menu.FinalScreen(game);
     if(menu.CheckIfQuit())
       break;
   }
