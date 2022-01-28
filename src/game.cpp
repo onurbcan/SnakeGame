@@ -68,16 +68,16 @@ void Game::PlaceFood() {
 }
 
 void Game::Update() {
-  if (!snake.alive) return;
+  if (!snake1.alive) return;
 
-  snake.Update();
+  snake1.Update();
 
   int new_x = static_cast<int>(snake.head_x);
   int new_y = static_cast<int>(snake.head_y);
 
   // Check if there's food over here
   if (food.x == new_x && food.y == new_y) {
-    score++;
+    score1++;
     PlaceFood();
     // Grow snake and increase speed.
     snake.GrowBody();
@@ -85,5 +85,7 @@ void Game::Update() {
   }
 }
 
-int Game::GetScore() const { return score; }
-int Game::GetSize() const { return snake.size; }
+int Game::GetScore1() const { return score1; }
+int Game::GetScore2() const { return score2; }
+int Game::GetSize1() const { return snake1.size; }
+int Game::GetSize2() const { return snake2.size; }

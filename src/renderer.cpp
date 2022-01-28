@@ -42,7 +42,7 @@ void Renderer::Render(Snake const snake1, Snake const snake2, SDL_Point const &f
   SDL_Rect block;
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;
-
+snake
   // Clear screen
   SDL_SetRenderDrawColor(sdl_renderer, 0x1E, 0x1E, 0x1E, 0xFF);
   SDL_RenderClear(sdl_renderer);
@@ -53,9 +53,16 @@ void Renderer::Render(Snake const snake1, Snake const snake2, SDL_Point const &f
   block.y = food.y * block.h;
   SDL_RenderFillRect(sdl_renderer, &block);
 
-  // Render snake's body
+  // Render snake1's body
   SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-  for (SDL_Point const &point : snake.body) {
+  for (SDL_Point const &point : snake1.body) {
+    block.x = point.x * block.w;
+    block.y = point.y * block.h;
+    SDL_RenderFillRect(sdl_renderer, &block);
+  }
+
+  // Render snake2's body
+  for (SDL_Point const &point : snake2.body) {
     block.x = point.x * block.w;
     block.y = point.y * block.h;
     SDL_RenderFillRect(sdl_renderer, &block);
@@ -64,7 +71,7 @@ void Renderer::Render(Snake const snake1, Snake const snake2, SDL_Point const &f
   // Render snake's head
   block.x = static_cast<int>(snake.head_x) * block.w;
   block.y = static_cast<int>(snake.head_y) * block.h;
-  if (snake.alive) {
+  if (snake1.alive && snake2.alive) {
     SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x7A, 0xCC, 0xFF);
   } else {
     SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);
