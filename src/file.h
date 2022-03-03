@@ -3,14 +3,18 @@
 
 #include <iostream>
 #include <fstream>
+#include <string>
+#include <vector>
 
 class File {
     public:
+        void CheckFile();
         void OpenFile();
         //void AddData();
         //void CloseFile();
     private:
-        std::ofstream dataFile;
+        std::fstream dataFile;
+        std::string userName{"user1"};
 };
 
 #endif

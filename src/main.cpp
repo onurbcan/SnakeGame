@@ -13,7 +13,7 @@ int main() {
   constexpr std::size_t kGridHeight{32};
 
   File file;
-  file.OpenFile();
+  file.CheckFile();
   Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
   Controller controller;
   Game game(kGridWidth, kGridHeight);
