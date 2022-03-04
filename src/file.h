@@ -8,13 +8,13 @@
 
 class File {
     public:
-        void CheckFile();
+        void CheckFile(std::string newUserName, int &lastScore);
         void OpenFile();
-        //void AddData();
-        //void CloseFile();
+        void ReadFileData(std::string newUserName, int &lastScore);
+        void AddData(std::string newUserName, int &lastScore);
+        void CloseFile();
     private:
         std::fstream dataFile;
-        std::string userName{"user1"};
 };
 
 #endif

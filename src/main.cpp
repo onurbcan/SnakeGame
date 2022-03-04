@@ -3,6 +3,7 @@
 #include "game.h"
 #include "renderer.h"
 #include "file.h"
+#include <string>
 
 int main() {
   constexpr std::size_t kFramesPerSecond{60};
@@ -12,8 +13,13 @@ int main() {
   constexpr std::size_t kGridWidth{32};
   constexpr std::size_t kGridHeight{32};
 
+  std::string newUserName = "user2"; //sample user name to test the compare ability of the file.cpp methods
+  int lastScore = 0;
   File file;
-  file.CheckFile();
+  file.CheckFile(newUserName, lastScore);
+  file.AddData();
+  std::cout << lastScore << std::endl;
+
   Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
   Controller controller;
   Game game(kGridWidth, kGridHeight);

@@ -1,48 +1,43 @@
 #include "file.h"
 
-void File::CheckFile() {
+void File::CheckFile(std::string newUserName, int &lastScore) {
     dataFile.open("GameData.txt");
     if(dataFile) {
-        std::cout << "file exists\n";
+        // file exists, read data inside
+        ReadFileData(newUserName, lastScore);
+        CloseFile();
     } else {
+        // no file exists, create a new one
         OpenFile();
+        CloseFile();
     }
 }
 
 void File::OpenFile() {
     dataFile.open("GameData.txt");
     dataFile << "Writing this to a file.\n";
-    dataFile.close();
 }
 
-bool CheckWord(char* str)
-{
-    //std::string filename("input.txt");
-    std::vector<std::string> words;
-    std::string word;
-    /*
-    if (!dataFile.is_open()) {
-        cerr << "Could not open the file - '"
-             << filename << "'" << endl;
-        return EXIT_FAILURE;
+void File::ReadFileData(std::string newUserName, int &lastScore) {
+    std::string userName;
+    int score;
+    while(dataFile >> userName >> score) {
+        if(!userName.compare(newUserName))
+            lastScore = score;
     }
-    */
-    while( dataFile >> word) {
-        words.push_back(word);
-    }
-    
-    for (const auto &i : words) {
-        std::cout << i << std::endl;
-    }
-
 }
 
-/*
-void File::AddData() {
-    
+void File::AddData(std::string newUserName, int &lastScore) {
+    OpenFile();
+    std::string userName;
+    int score;
+    while(dataFile >> userName >> score) {
+        if(!userName.compare(newUserName))
+            lastScore = score;
+    }
+    CloseFile();
 }
 
 void File::CloseFile() {
-    
+    dataFile.close();
 }
-*/
