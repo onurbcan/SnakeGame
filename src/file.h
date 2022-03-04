@@ -11,10 +11,12 @@ class File {
         void CheckFile(std::string newUserName, int &lastScore);
         void OpenFile();
         void ReadFileData(std::string newUserName, int &lastScore);
-        void AddData(std::string newUserName, int &lastScore);
+        void GetHighestScore(std::string newUserName, int &lastHighestScore);
+        void AddData(std::string UserName, int score);
         void CloseFile();
     private:
         std::fstream dataFile;
+        std::fstream dataFileAppend;
 };
 
 #endif

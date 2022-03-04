@@ -14,11 +14,11 @@ int main() {
   constexpr std::size_t kGridHeight{32};
 
   std::string newUserName = "user2"; //sample user name to test the compare ability of the file.cpp methods
-  int lastScore = 0;
+  int lastHighestScore = 0; //sample last highest score
   File file;
-  file.CheckFile(newUserName, lastScore);
-  file.AddData();
-  std::cout << lastScore << std::endl;
+  //file.CheckFile(newUserName, lastScore);
+  //file.GetHighestScore(newUserName, lastHighestScore);
+  file.AddData("user3", 7);
 
   Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
   Controller controller;
