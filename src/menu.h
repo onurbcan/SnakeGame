@@ -14,12 +14,12 @@ class Menu {
         void InitialScreen();
         void FinalScreen(Game &game);
         int CheckIfQuit();
+        int difficultyLevel{0};
 
     private:
         void AskName();
         void AskDifficultyLevel();
         std::string userName;
-        int difficultyLevel{0};
         int ifQuit{0};
 };
 

@@ -8,7 +8,7 @@ void Menu::InitialScreen() {
 }
 void Menu::FinalScreen(Game &game) {
     std::cout << "Game has terminated successfully!" <<std::endl;
-    std::cout << userName << "has made " << game.GetScore() << "Score with the Size of " 
+    std::cout << userName << "has made " << game.GetScore() << " Score with the Size of " 
         << game.GetSize() << std::endl;
     AskDifficultyLevel();
     return;

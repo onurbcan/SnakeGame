@@ -19,10 +19,11 @@ int main() {
     return 0;
   }
   while(true) {
+    int diffLevel = menu.difficultyLevel;
     Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
     Controller controller;
     Game game(kGridWidth, kGridHeight);
-    game.Run(controller, renderer, kMsPerFrame);
+    game.Run(controller, renderer, kMsPerFrame, diffLevel);
     menu.FinalScreen(game);
     if(menu.CheckIfQuit())
       break;
