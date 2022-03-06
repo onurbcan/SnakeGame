@@ -20,10 +20,16 @@ int main() {
   }
   while(true) {
     int diffLevel = menu.difficultyLevel;
+    double gameDuration;
+
     Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
     Controller controller;
     Game game(kGridWidth, kGridHeight);
-    game.Run(controller, renderer, kMsPerFrame, diffLevel);
+    game.Run(controller, renderer, kMsPerFrame, diffLevel, gameDuration);
+    
+    std::cout << "elapsed time: " << gameDuration << "s\n";
+
+
     menu.FinalScreen(game);
     if(menu.CheckIfQuit())
       break;
