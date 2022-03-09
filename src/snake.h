@@ -14,7 +14,7 @@ class Snake {
         head_x(grid_width / 2),
         head_y(grid_height / 2) {}
 
-  void Update();
+  void Update(bool &isDead);
 
   void GrowBody();
   bool SnakeCell(int x, int y);
@@ -30,7 +30,7 @@ class Snake {
 
  private:
   void UpdateHead();
-  void UpdateBody(SDL_Point &current_cell, SDL_Point &prev_cell);
+  void UpdateBody(SDL_Point &current_cell, SDL_Point &prev_cell, bool &isDead);
 
   bool growing{false};
   int grid_width;

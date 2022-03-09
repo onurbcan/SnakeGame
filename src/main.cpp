@@ -11,25 +11,22 @@ int main() {
   constexpr std::size_t kScreenHeight{640};
   constexpr std::size_t kGridWidth{32};
   constexpr std::size_t kGridHeight{32};
+  double gameDuration = 0.0;
 
+  
   Menu menu;
+  int diffLevel = menu.difficultyLevel;
   menu.InitialScreen();
   if(menu.CheckIfQuit()) {
     std::cout << "Game has terminated successfully!" <<std::endl;
     return 0;
   }
   while(true) {
-    int diffLevel = menu.difficultyLevel;
-    double gameDuration;
-
     Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
     Controller controller;
     Game game(kGridWidth, kGridHeight);
     game.Run(controller, renderer, kMsPerFrame, diffLevel, gameDuration);
-    
     std::cout << "elapsed time: " << gameDuration << "s\n";
-
-
     menu.FinalScreen(game);
     if(menu.CheckIfQuit())
       break;

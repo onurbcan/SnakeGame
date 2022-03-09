@@ -24,7 +24,9 @@ class Game {
   std::mt19937 engine;
   std::uniform_int_distribution<int> random_w;
   std::uniform_int_distribution<int> random_h;
-
+  std::chrono::time_point<std::chrono::system_clock> startTime, endTime;
+  std::chrono::time_point<std::chrono::system_clock> beginTime = std::chrono::system_clock::now(), scoreTime;
+  
   int score{0};
 
   void PlaceFood();

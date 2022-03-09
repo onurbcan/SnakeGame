@@ -8,7 +8,7 @@ void Menu::InitialScreen() {
 }
 void Menu::FinalScreen(Game &game) {
     std::cout << "Game has terminated successfully!" <<std::endl;
-    std::cout << userName << "has made " << game.GetScore() << " Score with the Size of " 
+    std::cout << userName << " has made " << game.GetScore() << " Score with the Size of " 
         << game.GetSize() << std::endl;
     AskDifficultyLevel();
     return;
@@ -21,7 +21,7 @@ void Menu::AskName() {
         std::cin >> userName;
         if (userName.size() >= 4)
             break;
-        std::cout << userName << "is an invalid name, please try again." << std::endl;
+        std::cout << userName << " is an invalid name, please try again." << std::endl;
     }
     return;
 }
@@ -37,7 +37,7 @@ void Menu::AskDifficultyLevel() {
 
         if (0 <= difficultyLevel && difficultyLevel <= 3)
             break;
-        std::cout << difficultyLevel << "is an invalid choice, please try again." << std::endl;
+        std::cout << difficultyLevel << " is an invalid choice, please try again." << std::endl;
     }
     switch (difficultyLevel) {
     case Difficulties::Quit:

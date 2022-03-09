@@ -21,6 +21,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   snake.speed = (diffLevel + 3) * 0.04; //gets values of 0.16, 0.20 and 0.24 
                                         //depending on diff level
 
+  startTime = std::chrono::system_clock::now();
   while (running) {
     frame_start = SDL_GetTicks();
 
@@ -68,16 +69,18 @@ void Game::PlaceFood() {
 }
 
 void Game::Update(double &gameDuration) {
-  std::chrono::time_point<std::chrono::system_clock> startTime, endTime;
-  startTime = std::chrono::system_clock::now();
+  bool isDead = false;
+  
   if (!snake.alive) {
-    endTime = std::chrono::system_clock::now();
-    std::chrono::duration<double> elapsedSeconds = endTime - startTime;
-    gameDuration = elapsedSeconds.count();
     return;
   }
 
-  snake.Update();
+  snake.Update(isDead);
+  if(isDead) {
+    endTime = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsedSeconds = endTime - startTime;
+    gameDuration = elapsedSeconds.count();
+  }
 
   int new_x = static_cast<int>(snake.head_x);
   int new_y = static_cast<int>(snake.head_y);
@@ -85,7 +88,14 @@ void Game::Update(double &gameDuration) {
   // Check if there's food over here
   if (food.x == new_x && food.y == new_y) {
     score++;
+    scoreTime = std::chrono::system_clock::now();
+    std::chrono::duration<double> foodElapsedSeconds = scoreTime - beginTime;
+    double foodDuration = foodElapsedSeconds.count();
+    if(foodDuration < 5)
+      std::cout << "hi\n";
     PlaceFood();
+    beginTime = std::chrono::system_clock::now();
+
     // Grow snake and increase speed.
     snake.GrowBody();
     //snake.speed += 0.02;
