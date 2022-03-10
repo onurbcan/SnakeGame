@@ -28,7 +28,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update(gameDuration);
-    renderer.Render(snake, food);
+    renderer.Render(snake, food, bonusFood);
 
     frame_end = SDL_GetTicks();
 
@@ -63,9 +63,19 @@ void Game::PlaceFood() {
     if (!snake.SnakeCell(x, y)) {
       food.x = x;
       food.y = y;
-      return;
+      break;
     }
   }
+  while (true) {
+    x = random_w(engine);
+    y = random_h(engine);
+    if (!(snake.SnakeCell(x, y) && x != food.x && y != food.y)) {
+      bonusFood.x = x;
+      bonusFood.y = y;
+      break;
+    }
+  }
+  return;
 }
 
 void Game::Update(double &gameDuration) {
@@ -86,13 +96,13 @@ void Game::Update(double &gameDuration) {
   int new_y = static_cast<int>(snake.head_y);
 
   // Check if there's food over here
-  if (food.x == new_x && food.y == new_y) {
+  if ((food.x == new_x && food.y == new_y) || (bonusFood.x == new_x && bonusFood.y == new_y)) {
     score++;
     scoreTime = std::chrono::system_clock::now();
     std::chrono::duration<double> foodElapsedSeconds = scoreTime - beginTime;
     double foodDuration = foodElapsedSeconds.count();
-    if(foodDuration < 5)
-      std::cout << "hi\n";
+    //if(foodDuration < 5)
+      std::cout << foodDuration << std::endl;
     PlaceFood();
     beginTime = std::chrono::system_clock::now();
 
