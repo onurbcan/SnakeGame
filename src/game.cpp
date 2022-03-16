@@ -8,6 +8,7 @@ Game::Game(std::size_t grid_width, std::size_t grid_height)
       random_w(0, static_cast<int>(grid_width - 1)),
       random_h(0, static_cast<int>(grid_height - 1)) {
   PlaceFood();
+  scoreTime = std::chrono::system_clock::now();
 }
 
 void Game::Run(Controller const &controller, Renderer &renderer,
@@ -66,6 +67,11 @@ void Game::PlaceFood() {
       break;
     }
   }
+  return;
+}
+
+void Game::PlaceBonusFood() {
+  int x, y;
   while (true) {
     x = random_w(engine);
     y = random_h(engine);
@@ -96,19 +102,27 @@ void Game::Update(double &gameDuration) {
   int new_y = static_cast<int>(snake.head_y);
 
   // Check if there's food over here
-  if ((food.x == new_x && food.y == new_y) || (bonusFood.x == new_x && bonusFood.y == new_y)) {
+  if (bonusFood.x == new_x && bonusFood.y == new_y) {
+    score++;
+    
+  }
+
+  // Check if there's food over here
+  if (food.x == new_x && food.y == new_y) {
     score++;
     scoreTime = std::chrono::system_clock::now();
-    std::chrono::duration<double> foodElapsedSeconds = scoreTime - beginTime;
-    double foodDuration = foodElapsedSeconds.count();
-    //if(foodDuration < 5)
-      std::cout << foodDuration << std::endl;
     PlaceFood();
-    beginTime = std::chrono::system_clock::now();
+    PlaceBonusFood();
 
+    beginTime = std::chrono::system_clock::now();
     // Grow snake and increase speed.
     snake.GrowBody();
-    //snake.speed += 0.02;
+  }
+  if() {
+    scoreTime = std::chrono::system_clock::now();
+    std::chrono::duration<double> foodElapsedSeconds = scoreTime - beginTime;
+    foodDuration = foodElapsedSeconds.count();
+    std::cout << foodDuration << std::endl;
   }
 }
 

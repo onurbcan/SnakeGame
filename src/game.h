@@ -29,8 +29,10 @@ class Game {
   std::chrono::time_point<std::chrono::system_clock> beginTime = std::chrono::system_clock::now(), scoreTime;
   
   int score{0};
+  double foodDuration;
 
   void PlaceFood();
+  void PlaceBonusFood();
   void Update(double &gameDuration);
 };
 
