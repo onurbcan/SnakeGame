@@ -101,10 +101,15 @@ void Game::Update(double &gameDuration) {
   int new_x = static_cast<int>(snake.head_x);
   int new_y = static_cast<int>(snake.head_y);
 
+  scoreTime = std::chrono::system_clock::now();
+  std::chrono::duration<double> foodElapsedSeconds = scoreTime - beginTime;
+  foodDuration = foodElapsedSeconds.count();
+  //std::cout << foodDuration << std::endl;
+
   // Check if there's food over here
   if (bonusFood.x == new_x && bonusFood.y == new_y) {
     score++;
-    
+    PlaceBonusFood();
   }
 
   // Check if there's food over here
@@ -112,17 +117,13 @@ void Game::Update(double &gameDuration) {
     score++;
     scoreTime = std::chrono::system_clock::now();
     PlaceFood();
-    PlaceBonusFood();
 
     beginTime = std::chrono::system_clock::now();
     // Grow snake and increase speed.
     snake.GrowBody();
   }
-  if() {
-    scoreTime = std::chrono::system_clock::now();
-    std::chrono::duration<double> foodElapsedSeconds = scoreTime - beginTime;
-    foodDuration = foodElapsedSeconds.count();
-    std::cout << foodDuration << std::endl;
+  if(5 < foodDuration && foodDuration < 5.05) {
+    PlaceBonusFood();
   }
 }
 
