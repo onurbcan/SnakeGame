@@ -75,7 +75,7 @@ void Game::PlaceBonusFood() {
   while (true) {
     x = random_w(engine);
     y = random_h(engine);
-    if (!(snake.SnakeCell(x, y) && x != food.x && y != food.y)) {
+    if (!(snake.SnakeCell(x, y) && x == food.x && y == food.y)) {
       bonusFood.x = x;
       bonusFood.y = y;
       break;
@@ -105,9 +105,13 @@ void Game::Update(double &gameDuration) {
   std::chrono::duration<double> foodElapsedSeconds = scoreTime - beginTime;
   foodDuration = foodElapsedSeconds.count();
   //std::cout << foodDuration << std::endl;
-
+  if (foodDuration > 5.0) {
+    beginTime = std::chrono::system_clock::now();
+    PlaceBonusFood();
+  }
   // Check if there's food over here
   if (bonusFood.x == new_x && bonusFood.y == new_y) {
+    beginTime = std::chrono::system_clock::now();
     score++;
     PlaceBonusFood();
   }
@@ -118,12 +122,8 @@ void Game::Update(double &gameDuration) {
     scoreTime = std::chrono::system_clock::now();
     PlaceFood();
 
-    beginTime = std::chrono::system_clock::now();
     // Grow snake and increase speed.
     snake.GrowBody();
-  }
-  if(5 < foodDuration && foodDuration < 5.05) {
-    PlaceBonusFood();
   }
 }
 
