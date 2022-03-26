@@ -34,7 +34,7 @@ class Snake {
 
   // move assignment operator
   Snake &operator=(Snake &&other) {
-
+    
   }
 
   void Update();
