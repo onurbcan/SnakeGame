@@ -4,10 +4,12 @@
 
 Game::Game(std::size_t grid_width, std::size_t grid_height)
     : snake(grid_width, grid_height),
+      snake2(grid_width, grid_height),
       engine(dev()),
       random_w(0, static_cast<int>(grid_width - 1)),
       random_h(0, static_cast<int>(grid_height - 1)) {
   PlaceFood();
+  snake2.direction = Snake::Direction::kDown;
 }
 
 void Game::Run(Controller const &controller, Renderer &renderer,
@@ -67,8 +69,10 @@ void Game::PlaceFood() {
 
 void Game::Update() {
   if (!snake.alive) return;
+  if (!snake2.alive) return;
 
   snake.Update();
+  snake2.Update();
 
   int new_x = static_cast<int>(snake.head_x);
   int new_y = static_cast<int>(snake.head_y);
@@ -80,6 +84,9 @@ void Game::Update() {
     // Grow snake and increase speed.
     snake.GrowBody();
     snake.speed += 0.02;
+
+    snake2.GrowBody();
+    snake2.speed += 0.02;
   }
 }
 

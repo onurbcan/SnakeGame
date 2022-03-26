@@ -14,6 +14,29 @@ class Snake {
         head_x(grid_width / 2),
         head_y(grid_height / 2) {}
 
+  // copy constructor
+  Snake(const Snake &other) {
+    
+  }
+
+  // destructor
+  ~Snake() {}
+
+  // copy assignment operator
+  Snake &operator=(const Snake &other) {
+    return *this;
+  }
+
+  // move constructor
+  Snake(Snake &&other) {
+
+  }
+
+  // move assignment operator
+  Snake &operator=(Snake &&other) {
+
+  }
+
   void Update();
 
   void GrowBody();
