@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 #include "controller.h"
 #include "game.h"
 #include "renderer.h"
@@ -12,8 +13,8 @@ int main() {
   constexpr std::size_t kGridHeight{32};
 
   Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
-  Controller controller;
-  Game game(kGridWidth, kGridHeight);
+  std::shared_ptr<Controller> controller = std::make_shared<RightController>();
+  Game game(static_cast<int>(kGridWidth), static_cast<int>(kGridHeight));
   game.Run(controller, renderer, kMsPerFrame);
   std::cout << "Game has terminated successfully!\n";
   std::cout << "Score: " << game.GetScore() << "\n";
