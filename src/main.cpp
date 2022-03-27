@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 #include "controller.h"
 #include "game.h"
 #include "renderer.h"
@@ -13,7 +14,6 @@ int main() {
   constexpr std::size_t kGridHeight{32};
   double gameDuration = 0.0;
 
-  
   Menu menu;
   int diffLevel = menu.difficultyLevel;
   menu.InitialScreen();
@@ -23,8 +23,8 @@ int main() {
   }
   while(true) {
     Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
-    Controller controller;
-    Game game(kGridWidth, kGridHeight);
+    std::shared_ptr<Controller> controller = std::make_shared<RightController>();
+    Game game(static_cast<int>(kGridWidth), static_cast<int>(kGridHeight));
     game.Run(controller, renderer, kMsPerFrame, diffLevel, gameDuration);
     std::cout << "elapsed time: " << gameDuration << "s\n";
     menu.FinalScreen(game);

@@ -3,6 +3,7 @@
 
 #include <random>
 #include <chrono>
+#include <memory>
 #include "SDL.h"
 #include "controller.h"
 #include "renderer.h"
@@ -10,14 +11,15 @@
 
 class Game {
  public:
-  Game(std::size_t grid_width, std::size_t grid_height);
-  void Run(Controller const &controller, Renderer &renderer,
-           std::size_t target_frame_duration, int diffLevel, double &gameDuration);
+  Game(int grid_width, int grid_height);
+  void Run(std::shared_ptr<Controller> const &controller, Renderer &renderer,
+           std::size_t target_frame_duration);
   int GetScore() const;
   int GetSize() const;
 
- private:
-  Snake snake;
+ //private:
+  std::shared_ptr<Snake> snake;// = std::make_shared<Snake>(std::size_t, std::size_t);
+  //Snake snake2;
   SDL_Point food;
   SDL_Point bonusFood;
 

@@ -2,32 +2,36 @@
 #include <iostream>
 #include "SDL.h"
 
-Game::Game(std::size_t grid_width, std::size_t grid_height)
-    : snake(grid_width, grid_height),
-      engine(dev()),
+Game::Game(int grid_width, int grid_height)
+    : engine(dev()),
       random_w(0, static_cast<int>(grid_width - 1)),
       random_h(0, static_cast<int>(grid_height - 1)) {
+  snake = std::make_shared<Snake>(grid_width, grid_height);
   PlaceFood();
   scoreTime = std::chrono::system_clock::now();
 }
 
-void Game::Run(Controller const &controller, Renderer &renderer,
-               std::size_t target_frame_duration, int diffLevel, double &gameDuration) {
+void Game::Run(std::shared_ptr<Controller> const &controller, Renderer &renderer,
+               std::size_t target_frame_duration) {
+
   Uint32 title_timestamp = SDL_GetTicks();
   Uint32 frame_start;
   Uint32 frame_end;
   Uint32 frame_duration;
   int frame_count = 0;
   bool running = true;
+
   snake.speed = (diffLevel + 3) * 0.04; //gets values of 0.16, 0.20 and 0.24 
                                         //depending on diff level
 
   startTime = std::chrono::system_clock::now();
+
   while (running) {
     frame_start = SDL_GetTicks();
 
     // Input, Update, Render - the main game loop.
-    controller.HandleInput(running, snake);
+
+    controller->HandleInput(running, snake);
     Update(gameDuration);
     renderer.Render(snake, food, bonusFood);
 
@@ -61,7 +65,7 @@ void Game::PlaceFood() {
     y = random_h(engine);
     // Check that the location is not occupied by a snake item before placing
     // food.
-    if (!snake.SnakeCell(x, y)) {
+    if (!snake->SnakeCell(x, y)) {
       food.x = x;
       food.y = y;
       break;
@@ -87,19 +91,19 @@ void Game::PlaceBonusFood() {
 void Game::Update(double &gameDuration) {
   bool isDead = false;
   
-  if (!snake.alive) {
-    return;
-  }
+  if (!snake->alive) return;
+  //if (!snake2->alive) return;
 
-  snake.Update(isDead);
+  snake->Update(isDead);
+  //snake2->Update();
   if(isDead) {
     endTime = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsedSeconds = endTime - startTime;
     gameDuration = elapsedSeconds.count();
   }
 
-  int new_x = static_cast<int>(snake.head_x);
-  int new_y = static_cast<int>(snake.head_y);
+  int new_x = static_cast<int>(snake->head_x);
+  int new_y = static_cast<int>(snake->head_y);
 
   scoreTime = std::chrono::system_clock::now();
   std::chrono::duration<double> foodElapsedSeconds = scoreTime - beginTime;
@@ -123,9 +127,13 @@ void Game::Update(double &gameDuration) {
     PlaceFood();
 
     // Grow snake and increase speed.
-    snake.GrowBody();
+    snake->GrowBody();
+    //snake->speed += 0.02;
+
+    //snake2->GrowBody();
+    //snake2->speed += 0.02;
   }
 }
 
 int Game::GetScore() const { return score; }
-int Game::GetSize() const { return snake.size; }
+int Game::GetSize() const { return snake->size; }
