@@ -1,8 +1,10 @@
 #include <iostream>
 #include <memory>
+#include <string>
 #include "controller.h"
 #include "game.h"
 #include "renderer.h"
+#include "file.h"
 #include "menu.h"
 
 int main() {
@@ -16,6 +18,13 @@ int main() {
 
   Menu menu;
   int diffLevel = menu.difficultyLevel;
+  
+  std::string newUserName = "user2"; //sample user name to test the compare ability of the file.cpp methods
+  int lastHighestScore = 0; //sample last highest score
+  File file;
+  //file.CheckFile(newUserName, lastScore);
+  //file.GetHighestScore(newUserName, lastHighestScore);
+
   menu.InitialScreen();
   if(menu.CheckIfQuit()) {
     std::cout << "Game has terminated successfully!" <<std::endl;
@@ -31,6 +40,7 @@ int main() {
     if(menu.CheckIfQuit())
       break;
   }
+  file.AddData("user3", 7);
   /*
   std::cout << "Game has terminated successfully!\n";
   std::cout << "Score: " << game.GetScore() << "\n";
