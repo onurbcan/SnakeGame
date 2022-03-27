@@ -53,6 +53,12 @@ void Renderer::Render(std::shared_ptr<Snake> const snake, SDL_Point const &food)
   block.y = food.y * block.h;
   SDL_RenderFillRect(sdl_renderer, &block);
 
+  // Render bonus food
+  SDL_SetRenderDrawColor(sdl_renderer, 0x55, 0x55, 0x55, 0xFF);
+  block.x = bonusFood.x * block.w;
+  block.y = bonusFood.y * block.h;
+  SDL_RenderFillRect(sdl_renderer, &block);
+
   // Render snake's body
   SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
   for (SDL_Point const &point : snake->body) {
