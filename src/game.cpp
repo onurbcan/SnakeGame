@@ -12,7 +12,7 @@ Game::Game(int grid_width, int grid_height)
 }
 
 void Game::Run(std::shared_ptr<Controller> const &controller, Renderer &renderer,
-               std::size_t target_frame_duration) {
+               std::size_t target_frame_duration, int diffLevel, double &gameDuration) {
 
   Uint32 title_timestamp = SDL_GetTicks();
   Uint32 frame_start;
@@ -21,7 +21,7 @@ void Game::Run(std::shared_ptr<Controller> const &controller, Renderer &renderer
   int frame_count = 0;
   bool running = true;
 
-  snake.speed = (diffLevel + 3) * 0.04; //gets values of 0.16, 0.20 and 0.24 
+  snake->speed = (diffLevel + 3) * 0.04; //gets values of 0.16, 0.20 and 0.24 
                                         //depending on diff level
 
   startTime = std::chrono::system_clock::now();
@@ -79,7 +79,7 @@ void Game::PlaceBonusFood() {
   while (true) {
     x = random_w(engine);
     y = random_h(engine);
-    if (!(snake.SnakeCell(x, y) && x == food.x && y == food.y)) {
+    if (!(snake->SnakeCell(x, y) && x == food.x && y == food.y)) {
       bonusFood.x = x;
       bonusFood.y = y;
       break;

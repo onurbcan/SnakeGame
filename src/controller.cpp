@@ -29,6 +29,11 @@ void RightController::HandleInput(bool &running, std::shared_ptr<Snake> &snake) 
           ChangeDirection(snake, Snake::Direction::kRight,
                           Snake::Direction::kLeft);
           break;
+        case SDLK_ESCAPE:
+          running = false;
+          break;
+        default:
+          break;
       }
     }
   }
@@ -62,6 +67,8 @@ void LeftController::HandleInput(bool &running, std::shared_ptr<Snake> &snake) c
           break;
         case SDLK_ESCAPE:
           running = false;
+          break;
+        default:
           break;
       }
     }
