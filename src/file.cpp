@@ -22,19 +22,18 @@ void File::ReadFileData(std::string &newUserName, int &lastHighestScore, int &hi
     std::string userName;
     int score;
     while(dataFile >> userName >> score) {
-        if(!userName.compare(newUserName))
+        if(newUserName.compare(userName) == 0)
             if(score > lastHighestScore)
                 lastHighestScore = score;
         if(score > highestScore)
             highestScore = score;
+        userName.clear();
     }
-    CloseFile();
 }
 
 void File::AddData(std::string &userName, int score) {
     dataFileAppend.open("GameData.txt", std::ios::app);
-    dataFileAppend << UserName << " " << score << std::endl;
-    CloseFile();
+    dataFileAppend << userName << " " << score << std::endl;
 }
 
 void File::CloseFile() {

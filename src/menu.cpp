@@ -63,3 +63,5 @@ int Menu::CheckIfQuit() {
         return 1;
     return 0;
 }
+
+std::string Menu::GetUserName() { return userName; }

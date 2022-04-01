@@ -13,6 +13,7 @@ class Menu {
     public:
         void InitialScreen();
         void FinalScreen(Game &game);
+        std::string GetUserName();
         int CheckIfQuit();
         int difficultyLevel{0};
 
