@@ -20,28 +20,28 @@ class Snake {
 
   // copy constructor
   Snake(const Snake &other) {
-    std::cout << "copy constructor\n";
+    //std::cout << "copy constructor\n";
   }
 
   // destructor
   ~Snake() {
-    std::cout << "destructor\n";
+    //std::cout << "destructor\n";
   }
 
   // copy assignment operator
   Snake &operator=(const Snake &other) {
-    std::cout << "copy assignment operator\n";
+    //std::cout << "copy assignment operator\n";
     return *this;
   }
 
   // move constructor
   Snake(Snake &&other) {
-    std::cout << "move constructor\n";
+    //std::cout << "move constructor\n";
   }
 
   // move assignment operator
   Snake &operator=(Snake &&other) {
-    std::cout << "move assignment operator\n";
+    //std::cout << "move assignment operator\n";
   }
 
   void Update(bool &isDead);
