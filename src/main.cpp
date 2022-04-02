@@ -40,6 +40,8 @@ int main() {
     std::shared_ptr<Controller> controller = std::make_shared<RightController>();
     Game game(static_cast<int>(kGridWidth), static_cast<int>(kGridHeight));
     game.Run(controller, renderer, kMsPerFrame, diffLevel, gameDuration);
+    file.AddData(newUserName, game.GetScore());
+    file.CloseFile();
     std::cout << "elapsed time: " << gameDuration << "\n";
     std::cout << "last highest score: " << lastHighestScore << "\n";
     std::cout << "highest score: " << highestScore << "\n";
@@ -47,8 +49,7 @@ int main() {
     if(menu.CheckIfQuit())
       break;
   }
-  file.AddData(newUserName, game.GetScore());
-  file.CloseFile();
+
   /*
   std::cout << "Game has terminated successfully!\n";
   std::cout << "Score: " << game.GetScore() << "\n";

@@ -36,11 +36,13 @@ class Snake {
 
   // move constructor
   Snake(Snake &&other) {
+    this->direction = Direction::kDown;
     //std::cout << "move constructor\n";
   }
 
   // move assignment operator
   Snake &operator=(Snake &&other) {
+    this->direction = Direction::kDown;
     //std::cout << "move assignment operator\n";
   }
 
@@ -51,7 +53,7 @@ class Snake {
 
   Direction direction = Direction::kUp;
 
-  float speed{0.1f};
+  float speed{0.16f};
   int size{1};
   bool alive{true};
   float head_x;

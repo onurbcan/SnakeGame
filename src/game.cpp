@@ -7,6 +7,10 @@ Game::Game(int grid_width, int grid_height)
       random_w(0, static_cast<int>(grid_width - 1)),
       random_h(0, static_cast<int>(grid_height - 1)) {
   snake = std::make_shared<Snake>(grid_width, grid_height);
+  snake2 = std::make_shared<Snake>(grid_width, grid_height);
+  snake2->head_x = (grid_width / 4);
+  snake2->head_y = (grid_height / 4);
+  snake2->direction = Snake::Direction::kDown;
   PlaceFood();
   scoreTime = std::chrono::system_clock::now();
 }
@@ -92,10 +96,10 @@ void Game::Update(double &gameDuration) {
   bool isDead = false;
   
   if (!snake->alive) return;
-  //if (!snake2->alive) return;
+  if (!snake2->alive) return;
 
   snake->Update(isDead);
-  //snake2->Update();
+  snake2->Update(isDead);
   if(isDead) {
     endTime = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsedSeconds = endTime - startTime;
@@ -130,7 +134,7 @@ void Game::Update(double &gameDuration) {
     snake->GrowBody();
     //snake->speed += 0.02;
 
-    //snake2->GrowBody();
+    snake2->GrowBody();
     //snake2->speed += 0.02;
   }
 }

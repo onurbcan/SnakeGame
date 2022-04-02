@@ -19,6 +19,7 @@ class Game {
 
  //private:
   std::shared_ptr<Snake> snake;// = std::make_shared<Snake>(std::size_t, std::size_t);
+  std::shared_ptr<Snake> snake2;
   //Snake snake2;
   SDL_Point food;
   SDL_Point bonusFood;
