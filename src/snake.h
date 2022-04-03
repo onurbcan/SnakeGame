@@ -5,8 +5,9 @@
 #include <memory>
 #include <iostream>
 #include "SDL.h"
+#include "points.h"
 
-class Snake {
+class Snake : public Points {
  public:
   enum class Direction { kUp, kDown, kLeft, kRight };
 
@@ -29,20 +30,26 @@ class Snake {
   }
 
   // copy assignment operator
-  Snake &operator=(const Snake &other) {
-    //std::cout << "copy assignment operator\n";
+  Snake &operator=(const Points &other) {
+    this->head_x = static_cast<float>(other.m_point.x);
+    this->head_y = static_cast<float>(other.m_point.y);
+    return *this;
+  }
+
+  // copy assignment operator
+  Snake &operator=(const std::shared_ptr<Snake> &other) {
+    this->head_x = other->head_x;
+    this->head_y = other->head_y;
     return *this;
   }
 
   // move constructor
   Snake(Snake &&other) {
-    this->direction = Direction::kDown;
     //std::cout << "move constructor\n";
   }
 
   // move assignment operator
   Snake &operator=(Snake &&other) {
-    this->direction = Direction::kDown;
     //std::cout << "move assignment operator\n";
   }
 

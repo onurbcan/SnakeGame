@@ -6,6 +6,7 @@
 #include "renderer.h"
 #include "file.h"
 #include "menu.h"
+#include "snake.h"
 
 int main() {
   constexpr std::size_t kFramesPerSecond{60};
@@ -17,7 +18,6 @@ int main() {
   double gameDuration = 0.0;
 
   Menu menu;
-  int diffLevel = menu.difficultyLevel;
   
   int score = 0;
   int lastHighestScore = 0; //sample last highest score
@@ -25,6 +25,7 @@ int main() {
 
 
   menu.InitialScreen();
+  int diffLevel = menu.difficultyLevel;
   std::string newUserName;
   newUserName.assign(menu.GetUserName()); //sample user name to test the compare ability of the file.cpp methods
 
@@ -32,14 +33,15 @@ int main() {
   file.CheckFile(newUserName, lastHighestScore, highestScore);
 
   if(menu.CheckIfQuit()) {
-    std::cout << "Game has terminated successfully!" <<std::endl;
+    std::cout << "Game has terminated successfully!\n";
     return 0;
   }
   while(true) {
     Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
-    std::shared_ptr<Controller> controller = std::make_shared<RightController>();
+    std::shared_ptr<Controller> controllerR = std::make_shared<RightController>();
+    std::shared_ptr<Controller> controllerL = std::make_shared<LeftController>();
     Game game(static_cast<int>(kGridWidth), static_cast<int>(kGridHeight));
-    game.Run(controller, renderer, kMsPerFrame, diffLevel, gameDuration);
+    game.Run(controllerR, controllerL, renderer, kMsPerFrame, diffLevel, gameDuration);
     file.AddData(newUserName, game.GetScore());
     file.CloseFile();
     std::cout << "elapsed time: " << gameDuration << "\n";

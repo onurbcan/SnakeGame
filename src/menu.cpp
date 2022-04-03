@@ -39,22 +39,26 @@ void Menu::AskDifficultyLevel() {
             break;
         std::cout << difficultyLevel << " is an invalid choice, please try again." << std::endl;
     }
+    if(difficultyLevel == 0)
+        ifQuit = 1;
+    /*
     switch (difficultyLevel) {
     case Difficulties::Quit:
         ifQuit = 1;
         break;
     case Difficulties::Easy:
-        difficultyLevel = Difficulties::Easy;
+        difficultyLevel = static_cast<int>(Difficulties::Easy);
         break;
     case Difficulties::Medium:
-        difficultyLevel = Difficulties::Medium;
+        difficultyLevel = static_cast<int>(Difficulties::Medium);
         break;
     case Difficulties::Hard:
-        difficultyLevel = Difficulties::Hard;
+        difficultyLevel = static_cast<int>(Difficulties::Hard);
         break;
     default:
         break;
     }
+    */
     return;
 }
 
