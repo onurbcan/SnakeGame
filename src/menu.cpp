@@ -1,15 +1,51 @@
 #include "menu.h"
 
+void Menu::GameLoop() {
+    std::size_t kFramesPerSecond{60};
+    std::size_t kMsPerFrame{1000 / kFramesPerSecond};
+    std::size_t kScreenWidth{640};
+    std::size_t kScreenHeight{640};
+    std::size_t kGridWidth{32};
+    std::size_t kGridHeight{32};
+
+    InitialScreen();
+    if(CheckIfQuit())
+        return;
+    File file;
+    file.CheckFile(userName, lastHighestScore, highestScore);
+    while(true) {
+        std::shared_ptr<Controller> controller = std::make_shared<RightController>();
+        Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
+        Game game(static_cast<int>(kGridWidth), static_cast<int>(kGridHeight));
+        game.Run(controller, renderer, kMsPerFrame, difficultyLevel, gameDuration);
+        file.AddData(userName, game.GetScore());
+        file.CloseFile();
+        std::cout << "elapsed time: " << gameDuration << "\n";
+        std::cout << "last highest score: " << lastHighestScore << "\n";
+        std::cout << "highest score: " << highestScore << "\n";
+        FinalScreen();
+        if(CheckIfQuit())
+            return;
+    }
+    /*
+    std::cout << "Game has terminated successfully!\n";
+    std::cout << "Score: " << game.GetScore() << "\n";
+    std::cout << "Size: " << game.GetSize() << "\n";
+    */
+    return;
+}
+
 void Menu::InitialScreen() {
     std::cout << "Welcome to Snake Game" << std::endl;
     AskName();
     AskDifficultyLevel();
     return;
 }
-void Menu::FinalScreen(Game &game) {
-    std::cout << "Game has terminated successfully!" <<std::endl;
-    std::cout << userName << " has made " << game.GetScore() << " Score with the Size of " 
-        << game.GetSize() << std::endl;
+
+void Menu::FinalScreen() {
+    // Problem here because of the game object !
+    //std::cout << userName << " has made " << game.GetScore() << " Score with the Size of " 
+    //    << game.GetSize() << std::endl;
     AskDifficultyLevel();
     return;
 }
@@ -41,30 +77,14 @@ void Menu::AskDifficultyLevel() {
     }
     if(difficultyLevel == 0)
         ifQuit = 1;
-    /*
-    switch (difficultyLevel) {
-    case Difficulties::Quit:
-        ifQuit = 1;
-        break;
-    case Difficulties::Easy:
-        difficultyLevel = static_cast<int>(Difficulties::Easy);
-        break;
-    case Difficulties::Medium:
-        difficultyLevel = static_cast<int>(Difficulties::Medium);
-        break;
-    case Difficulties::Hard:
-        difficultyLevel = static_cast<int>(Difficulties::Hard);
-        break;
-    default:
-        break;
-    }
-    */
     return;
 }
 
 int Menu::CheckIfQuit() {
-    if(ifQuit == 1)
+    if(ifQuit == 1) {
+        std::cout << "Game has terminated successfully!\n";
         return 1;
+    }
     return 0;
 }
 

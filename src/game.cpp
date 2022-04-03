@@ -1,6 +1,5 @@
 #include "game.h"
 #include <iostream>
-#include <vector>
 #include "SDL.h"
 
 Game::Game(int grid_width, int grid_height)
@@ -8,27 +7,19 @@ Game::Game(int grid_width, int grid_height)
       random_w(0, static_cast<int>(grid_width - 1)),
       random_h(0, static_cast<int>(grid_height - 1)) {
   snake = std::make_shared<Snake>(grid_width, grid_height);
+  
   snake2 = std::make_shared<Snake>(grid_width, grid_height);
-  food = std::make_shared<Points>(0xFF, 0xCC, 0x00, 0xFF);
-  bonusFood = std::make_shared<Points>(0x55, 0x55, 0x55, 0xFF);
-  //allPoints = std::make_shared<std::shared_ptr<Points>>();
-
+  /*
   snake2->head_x = (grid_width / 4);
   snake2->head_y = (grid_height / 4);
   snake2->direction = Snake::Direction::kDown;
-
-  allPoints.push_back(food);
-  allPoints.push_back(bonusFood);
-  allPoints.push_back(snake);
-  allPoints.push_back(snake2);
-
+  */
   PlaceFood();
   PlaceBonusFood();
   scoreTime = std::chrono::system_clock::now();
 }
 
-void Game::Run(std::shared_ptr<Controller> const &controllerR, 
-               std::shared_ptr<Controller> const &controllerL, Renderer &renderer,
+void Game::Run(std::shared_ptr<Controller> const &controller, Renderer &renderer,
                std::size_t target_frame_duration, int diffLevel, double &gameDuration) {
 
   Uint32 title_timestamp = SDL_GetTicks();
@@ -40,21 +31,18 @@ void Game::Run(std::shared_ptr<Controller> const &controllerR,
 
   snake->speed = (diffLevel + 3) * 0.04; //gets values of 0.16, 0.20 and 0.24 
                                         //depending on diff level
-  //std::cout << "snake speed: " << snake->speed << " , diff level: " << diffLevel << "\n";
+
   startTime = std::chrono::system_clock::now();
 
   while (running) {
     frame_start = SDL_GetTicks();
-    //std::cout << "snake speed: " << snake->speed << "\n";
-    //std::cout << "snake2 speed: " << snake2->speed << "\n";
 
     // Input, Update, Render - the main game loop.
 
-    controllerR->HandleInput(running, snake);
-    //controllerL->HandleInput(running, snake2);
+    controller->HandleInput(running, snake);
     Update(gameDuration);
-    //renderer.Render(snake, food, bonusFood);
-    renderer.Render(allPoints);
+    renderer.Render(snake, food, bonusFood);
+
     frame_end = SDL_GetTicks();
 
     // Keep track of how long each loop through the input/update/render cycle
@@ -86,8 +74,8 @@ void Game::PlaceFood() {
     // Check that the location is not occupied by a snake item before placing
     // food.
     if (!snake->SnakeCell(x, y)) {
-      food->m_point.x = x;
-      food->m_point.y = y;
+      food.x = x;
+      food.y = y;
       break;
     }
   }
@@ -99,9 +87,9 @@ void Game::PlaceBonusFood() {
   while (true) {
     x = random_w(engine);
     y = random_h(engine);
-    if (!(snake->SnakeCell(x, y) && x == food->m_point.x && y == food->m_point.y)) {
-      bonusFood->m_point.x = x;
-      bonusFood->m_point.y = y;
+    if (!(snake->SnakeCell(x, y) && x == food.x && y == food.y)) {
+      bonusFood.x = x;
+      bonusFood.y = y;
       break;
     }
   }
@@ -134,14 +122,14 @@ void Game::Update(double &gameDuration) {
     PlaceBonusFood();
   }
   // Check if there's food over here
-  if (bonusFood->m_point.x == new_x && bonusFood->m_point.y == new_y) {
+  if (bonusFood.x == new_x && bonusFood.y == new_y) {
     beginTime = std::chrono::system_clock::now();
     score++;
     PlaceBonusFood();
   }
 
   // Check if there's food over here
-  if (food->m_point.x == new_x && food->m_point.y == new_y) {
+  if (food.x == new_x && food.y == new_y) {
     score++;
     scoreTime = std::chrono::system_clock::now();
     PlaceFood();
