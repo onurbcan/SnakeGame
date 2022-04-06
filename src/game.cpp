@@ -9,17 +9,18 @@ Game::Game(int grid_width, int grid_height)
   snake = std::make_shared<Snake>(grid_width, grid_height);
   
   snake2 = std::make_shared<Snake>(grid_width, grid_height);
-  /*
+  
   snake2->head_x = (grid_width / 4);
   snake2->head_y = (grid_height / 4);
   snake2->direction = Snake::Direction::kDown;
-  */
+  
   PlaceFood();
   PlaceBonusFood();
   scoreTime = std::chrono::system_clock::now();
 }
 
-void Game::Run(std::shared_ptr<Controller> const &controller, Renderer &renderer,
+void Game::Run(std::shared_ptr<Controller> const &controller, 
+               std::shared_ptr<Controller> const &controller2, Renderer &renderer,
                std::size_t target_frame_duration, int diffLevel, double &gameDuration) {
 
   Uint32 title_timestamp = SDL_GetTicks();
@@ -40,8 +41,9 @@ void Game::Run(std::shared_ptr<Controller> const &controller, Renderer &renderer
     // Input, Update, Render - the main game loop.
 
     controller->HandleInput(running, snake);
+    controller2->HandleInput(running, snake2);
     Update(gameDuration);
-    renderer.Render(snake, food, bonusFood);
+    renderer.Render(snake, snake2, food, bonusFood);
 
     frame_end = SDL_GetTicks();
 

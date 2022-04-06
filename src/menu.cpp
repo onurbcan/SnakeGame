@@ -15,9 +15,10 @@ void Menu::GameLoop() {
     file.CheckFile(userName, lastHighestScore, highestScore);
     while(true) {
         std::shared_ptr<Controller> controller = std::make_shared<RightController>();
+        std::shared_ptr<Controller> controller2 = std::make_shared<LeftController>();
         Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
         Game game(static_cast<int>(kGridWidth), static_cast<int>(kGridHeight));
-        game.Run(controller, renderer, kMsPerFrame, difficultyLevel, gameDuration);
+        game.Run(controller, controller2, renderer, kMsPerFrame, difficultyLevel, gameDuration);
         file.AddData(userName, game.GetScore());
         file.CloseFile();
         std::cout << "elapsed time: " << gameDuration << "\n";
@@ -64,14 +65,14 @@ void Menu::AskName() {
 
 void Menu::AskDifficultyLevel() {
     while(true) {
-        std::cout << "Please enter the difficulty level of the game (e.g: 2):" << std::endl;
-        std::cout << "Type 0 to quit." << std::endl;
-        std::cout << "Easy (1)" << std::endl;
-        std::cout << "Medium (2)" << std::endl;
-        std::cout << "Hard (3)" << std::endl;
+        std::cout << "Please enter the difficulty level of the game (e.g: 2):\n";
+        std::cout << "Type 0 to quit.\n";
+        std::cout << "Easy (1)\n";
+        std::cout << "Medium (2)\n";
+        std::cout << "Hard (3)\n";
         std::cin >> difficultyLevel;
 
-        if (0 <= difficultyLevel && difficultyLevel <= 3)
+        if (difficultyLevel == 0 || difficultyLevel == 1 || difficultyLevel == 2 || difficultyLevel == 3)
             break;
         std::cout << difficultyLevel << " is an invalid choice, please try again." << std::endl;
     }
