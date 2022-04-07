@@ -3,9 +3,8 @@
 #include "SDL.h"
 #include "snake.h"
 
-void RightController::HandleInput(bool &running, std::shared_ptr<Snake> &snake) const {
-  SDL_Event e;
-  while (SDL_PollEvent(&e)) {
+void RightController::HandleInput(bool &running, std::shared_ptr<Snake> &snake, SDL_Event e) const {
+  //while (SDL_PollEvent(&e)) {
     if (e.type == SDL_QUIT) {
       running = false;
     } else if (e.type == SDL_KEYDOWN) {
@@ -38,12 +37,11 @@ void RightController::HandleInput(bool &running, std::shared_ptr<Snake> &snake) 
           break;
       }
     }
-  }
+  //}
 }
 
-void LeftController::HandleInput(bool &running, std::shared_ptr<Snake> &snake2) const {
-  SDL_Event e;
-  while (SDL_PollEvent(&e)) {
+void LeftController::HandleInput(bool &running, std::shared_ptr<Snake> &snake2, SDL_Event e) const {
+  //while (SDL_PollEvent(&e)) {
     if (e.type == SDL_QUIT) {
       running = false;
     } else if (e.type == SDL_KEYDOWN) {
@@ -78,7 +76,7 @@ void LeftController::HandleInput(bool &running, std::shared_ptr<Snake> &snake2) 
           break;
       }
     }
-  }
+  //}
 }
 
 void Controller::ChangeDirection(std::shared_ptr<Snake> &snake, Snake::Direction input,

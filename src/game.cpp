@@ -39,9 +39,10 @@ void Game::Run(std::shared_ptr<Controller> const &controller,
     frame_start = SDL_GetTicks();
 
     // Input, Update, Render - the main game loop.
-
-    controller->HandleInput(running, snake);
-    controller2->HandleInput(running, snake2);
+    SDL_Event e;
+    SDL_PollEvent(&e);
+    controller->HandleInput(running, snake, e);
+    controller2->HandleInput(running, snake2, e);
     Update(gameDuration);
     renderer.Render(snake, snake2, food, bonusFood);
 
