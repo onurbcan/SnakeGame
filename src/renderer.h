@@ -33,8 +33,6 @@ class Renderer {
   std::uniform_int_distribution<Uint8> random_r;
   std::uniform_int_distribution<Uint8> random_g;
   std::uniform_int_distribution<Uint8> random_b;
-
-  int r, g, b;
 };
 
 #endif

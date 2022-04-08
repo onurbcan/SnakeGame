@@ -19,6 +19,7 @@ class Game {
   int GetScoreL() const;
   int GetSizeR() const;
   int GetSizeL() const;
+  int GetWinner() const;
 
  //private:
   std::shared_ptr<Snake> snakeR;// = std::make_shared<Snake>(std::size_t, std::size_t);

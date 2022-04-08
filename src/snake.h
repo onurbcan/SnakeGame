@@ -46,10 +46,11 @@ class Snake {
     //std::cout << "move assignment operator\n";
   }
 
-  void Update();
+  void Update(std::vector<SDL_Point> &otherSnakeBody);
 
   void GrowBody();
   bool SnakeCell(int x, int y);
+  int GetWinner();
 
   Direction direction = Direction::kUp;
 
@@ -62,7 +63,7 @@ class Snake {
 
  private:
   void UpdateHead();
-  void UpdateBody(SDL_Point &current_cell, SDL_Point &prev_cell);
+  void UpdateBody(SDL_Point &current_cell, SDL_Point &prev_cell, std::vector<SDL_Point> &otherSnakeBody);
 
   bool growing{false};
   int grid_width;

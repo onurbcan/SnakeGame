@@ -5,6 +5,7 @@
 #include <string>
 #include <memory>
 #include "game.h"
+#include "snake.h"
 #include "file.h"
 #include "controller.h"
 #include "renderer.h"

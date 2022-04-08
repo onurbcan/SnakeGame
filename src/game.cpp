@@ -108,8 +108,8 @@ void Game::Update(bool &running, double &gameDuration) {
     return;
   }
 
-  snakeR->Update();
-  snakeL->Update();
+  snakeL->Update(snakeR->body);
+  snakeR->Update(snakeL->body);
 
   // snakeR's position
   int new_xR = static_cast<int>(snakeR->head_x);
@@ -164,3 +164,5 @@ int Game::GetScoreR() const { return scoreR; }
 int Game::GetScoreL() const { return scoreL; }
 int Game::GetSizeR() const { return snakeR->size; }
 int Game::GetSizeL() const { return snakeL->size; }
+
+int Game::GetWinner() const { return snakeR->alive ? 1 : 0; }

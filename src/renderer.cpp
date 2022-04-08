@@ -68,7 +68,11 @@ void Renderer::Render(std::shared_ptr<Snake> const snakeR, std::shared_ptr<Snake
 
   // Render snakeR's body
   // using blue color
-  SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x7A, 0xCC, 0xFF);
+  if (snakeR->alive) {
+    SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x7A, 0xCC, 0xFF);
+  } else {
+    SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);
+  }
   for (SDL_Point const &point : snakeR->body) {
     block.x = point.x * block.w;
     block.y = point.y * block.h;
@@ -77,7 +81,11 @@ void Renderer::Render(std::shared_ptr<Snake> const snakeR, std::shared_ptr<Snake
 
   // Render snakeL's body
   // using forest green color
-  SDL_SetRenderDrawColor(sdl_renderer, 0x22, 0x8B, 0x22, 0xFF);
+  if (snakeL->alive) {
+    SDL_SetRenderDrawColor(sdl_renderer, 0x22, 0x8B, 0x22, 0xFF);
+  } else {
+    SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);
+  }
   for (SDL_Point const &point : snakeL->body) {
     block.x = point.x * block.w;
     block.y = point.y * block.h;

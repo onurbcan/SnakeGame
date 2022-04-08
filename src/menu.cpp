@@ -21,6 +21,10 @@ void Menu::GameLoop() {
         game.Run(controllerR, controllerL, renderer, kMsPerFrame, difficultyLevel, gameDuration);
         file.AddData(userName, game.GetScoreR());
         file.CloseFile();
+        if(game.GetWinner())
+            std::cout << "winner: Blue Snake\n";
+        else
+            std::cout << "winner: Green Snake\n";
         std::cout << "elapsed time: " << gameDuration << "\n";
         std::cout << "last highest score: " << lastHighestScore << "\n";
         std::cout << "highest score: " << highestScore << "\n";
