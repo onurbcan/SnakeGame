@@ -1,10 +1,10 @@
 #include "file.h"
 
-void File::CheckFile(std::string newUserName, int &lastScore) {
+void File::CheckFile(std::string &newUserName, int &lastHighestScore, int &highestScore) {
     dataFile.open("GameData.txt");
     if(dataFile) {
         // file exists, read data inside
-        ReadFileData(newUserName, lastScore);
+        ReadFileData(newUserName, lastHighestScore, highestScore);
         CloseFile();
     } else {
         // no file exists, create a new one
@@ -18,32 +18,22 @@ void File::OpenFile() {
     //dataFile << "Writing this to a file.\n";
 }
 
-void File::ReadFileData(std::string newUserName, int &lastScore) {
+void File::ReadFileData(std::string &newUserName, int &lastHighestScore, int &highestScore) {
     std::string userName;
     int score;
     while(dataFile >> userName >> score) {
-        if(!userName.compare(newUserName))
-            lastScore = score;
-    }
-}
-
-void File::GetHighestScore(std::string newUserName, int &lastHighestScore) {
-    OpenFile();
-    std::string userName;
-    int score, highestScore = 0;
-    while(dataFile >> userName >> score) {
-        if(!userName.compare(newUserName)) {
+        if(newUserName.compare(userName) == 0)
             if(score > lastHighestScore)
                 lastHighestScore = score;
-        }
+        if(score > highestScore)
+            highestScore = score;
+        userName.clear();
     }
-    CloseFile();
 }
 
-void File::AddData(std::string UserName, int score) {
+void File::AddData(std::string &userName, int score) {
     dataFileAppend.open("GameData.txt", std::ios::app);
-    dataFileAppend << UserName << " " << score << std::endl;
-    CloseFile();
+    dataFileAppend << userName << " " << score << std::endl;
 }
 
 void File::CloseFile() {

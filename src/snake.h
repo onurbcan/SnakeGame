@@ -20,38 +20,41 @@ class Snake {
 
   // copy constructor
   Snake(const Snake &other) {
-    std::cout << "copy constructor\n";
+    //std::cout << "copy constructor\n";
   }
 
   // destructor
   ~Snake() {
-    std::cout << "destructor\n";
+    //std::cout << "destructor\n";
   }
 
   // copy assignment operator
   Snake &operator=(const Snake &other) {
-    std::cout << "copy assignment operator\n";
+    //std::cout << "copy assignment operator\n";
     return *this;
   }
 
   // move constructor
   Snake(Snake &&other) {
-    std::cout << "move constructor\n";
+    this->direction = Direction::kDown;
+    //std::cout << "move constructor\n";
   }
 
   // move assignment operator
   Snake &operator=(Snake &&other) {
-    std::cout << "move assignment operator\n";
+    this->direction = Direction::kDown;
+    //std::cout << "move assignment operator\n";
   }
 
-  void Update(bool &isDead);
+  void Update(std::vector<SDL_Point> &otherSnakeBody);
 
   void GrowBody();
   bool SnakeCell(int x, int y);
+  int GetWinner();
 
   Direction direction = Direction::kUp;
 
-  float speed{0.1f};
+  float speed{0.16f};
   int size{1};
   bool alive{true};
   float head_x;
@@ -60,7 +63,7 @@ class Snake {
 
  private:
   void UpdateHead();
-  void UpdateBody(SDL_Point &current_cell, SDL_Point &prev_cell, bool &isDead);
+  void UpdateBody(SDL_Point &current_cell, SDL_Point &prev_cell, std::vector<SDL_Point> &otherSnakeBody);
 
   bool growing{false};
   int grid_width;
