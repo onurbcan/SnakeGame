@@ -46,7 +46,7 @@ class Snake {
     //std::cout << "move assignment operator\n";
   }
 
-  void Update(bool &isDead);
+  void Update();
 
   void GrowBody();
   bool SnakeCell(int x, int y);
@@ -62,7 +62,7 @@ class Snake {
 
  private:
   void UpdateHead();
-  void UpdateBody(SDL_Point &current_cell, SDL_Point &prev_cell, bool &isDead);
+  void UpdateBody(SDL_Point &current_cell, SDL_Point &prev_cell);
 
   bool growing{false};
   int grid_width;

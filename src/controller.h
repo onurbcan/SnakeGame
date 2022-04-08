@@ -24,7 +24,7 @@ class RightController : public Controller {
 
 class LeftController : public Controller {
  public:
-  void HandleInput(bool &running, std::shared_ptr<Snake> &snake2, SDL_Event e) const;
+  void HandleInput(bool &running, std::shared_ptr<Snake> &snake, SDL_Event e) const;
 };
 
 #endif

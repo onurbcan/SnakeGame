@@ -12,15 +12,17 @@
 class Game {
  public:
   Game(int grid_width, int grid_height);
-  void Run(std::shared_ptr<Controller> const &controller, 
-           std::shared_ptr<Controller> const &controller2, Renderer &renderer,
+  void Run(std::shared_ptr<Controller> const &controllerR, 
+           std::shared_ptr<Controller> const &controllerL, Renderer &renderer,
            std::size_t target_frame_duration, int diffLevel, double &gameDuration);
-  int GetScore() const;
-  int GetSize() const;
+  int GetScoreR() const;
+  int GetScoreL() const;
+  int GetSizeR() const;
+  int GetSizeL() const;
 
  //private:
-  std::shared_ptr<Snake> snake;// = std::make_shared<Snake>(std::size_t, std::size_t);
-  std::shared_ptr<Snake> snake2;
+  std::shared_ptr<Snake> snakeR;// = std::make_shared<Snake>(std::size_t, std::size_t);
+  std::shared_ptr<Snake> snakeL;
 
   SDL_Point food;
   SDL_Point bonusFood;
@@ -32,12 +34,13 @@ class Game {
   std::chrono::time_point<std::chrono::system_clock> startTime, endTime;
   std::chrono::time_point<std::chrono::system_clock> beginTime = std::chrono::system_clock::now(), scoreTime;
   
-  int score{0};
+  int scoreR{0};
+  int scoreL{0};
   double foodDuration;
 
   void PlaceFood();
   void PlaceBonusFood();
-  void Update(double &gameDuration);
+  void Update(bool &running, double &gameDuration);
 };
 
 #endif

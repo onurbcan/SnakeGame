@@ -14,12 +14,12 @@ void Menu::GameLoop() {
     File file;
     file.CheckFile(userName, lastHighestScore, highestScore);
     while(true) {
-        std::shared_ptr<Controller> controller = std::make_shared<RightController>();
-        std::shared_ptr<Controller> controller2 = std::make_shared<LeftController>();
+        std::shared_ptr<Controller> controllerR = std::make_shared<RightController>();
+        std::shared_ptr<Controller> controllerL = std::make_shared<LeftController>();
         Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
         Game game(static_cast<int>(kGridWidth), static_cast<int>(kGridHeight));
-        game.Run(controller, controller2, renderer, kMsPerFrame, difficultyLevel, gameDuration);
-        file.AddData(userName, game.GetScore());
+        game.Run(controllerR, controllerL, renderer, kMsPerFrame, difficultyLevel, gameDuration);
+        file.AddData(userName, game.GetScoreR());
         file.CloseFile();
         std::cout << "elapsed time: " << gameDuration << "\n";
         std::cout << "last highest score: " << lastHighestScore << "\n";

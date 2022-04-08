@@ -35,7 +35,6 @@ class Menu {
         Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
         Game game(static_cast<int>(kGridWidth), static_cast<int>(kGridHeight));
         */
-        int score = 0; //score of the player
         int lastHighestScore = 0; // sample last highest score
         int highestScore = 0; // highest score of all users
 

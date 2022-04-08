@@ -40,29 +40,29 @@ void RightController::HandleInput(bool &running, std::shared_ptr<Snake> &snake, 
   //}
 }
 
-void LeftController::HandleInput(bool &running, std::shared_ptr<Snake> &snake2, SDL_Event e) const {
+void LeftController::HandleInput(bool &running, std::shared_ptr<Snake> &snake, SDL_Event e) const {
   //while (SDL_PollEvent(&e)) {
     if (e.type == SDL_QUIT) {
       running = false;
     } else if (e.type == SDL_KEYDOWN) {
       switch (e.key.keysym.sym) {
         case SDLK_w:
-          ChangeDirection(snake2, Snake::Direction::kUp,
+          ChangeDirection(snake, Snake::Direction::kUp,
                           Snake::Direction::kDown);
           break;
 
         case SDLK_s:
-          ChangeDirection(snake2, Snake::Direction::kDown,
+          ChangeDirection(snake, Snake::Direction::kDown,
                           Snake::Direction::kUp);
           break;
 
         case SDLK_a:
-          ChangeDirection(snake2, Snake::Direction::kLeft,
+          ChangeDirection(snake, Snake::Direction::kLeft,
                           Snake::Direction::kRight);
           break;
 
         case SDLK_d:
-          ChangeDirection(snake2, Snake::Direction::kRight,
+          ChangeDirection(snake, Snake::Direction::kRight,
                           Snake::Direction::kLeft);
           break;
 
