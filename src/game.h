@@ -11,14 +11,15 @@
 
 class Game {
  public:
+  Game() {}
   Game(int grid_width, int grid_height);
   void Run(std::shared_ptr<Controller> const &controllerR, 
            std::shared_ptr<Controller> const &controllerL, Renderer &renderer,
            std::size_t target_frame_duration, int difficultyLevelR, int difficultyLevelL, double &gameDuration);
-  int GetScoreR() const;
-  int GetScoreL() const;
-  int GetSizeR() const;
-  int GetSizeL() const;
+  int GetScoreR() const { return scoreR; }
+  int GetScoreL() const { return scoreL; }
+  int GetSizeR() const { return snakeR->size; }
+  int GetSizeL() const { return snakeL->size; }
   int GetWinner() const;
  
  private:

@@ -9,40 +9,64 @@ void Menu::GameLoop() {
     std::size_t kGridHeight{32};
 
     InitialScreen();
-    if(CheckIsQuit())
+    if(isQuit) {
+        std::cout << "Game has terminated successfully!\n";
         return;
+    }
     File file;
-    file.CheckFile(userNameR, userNameL, lastHighestScoreR, lastHighestScoreL, highestScore);
     while(true) {
+        file.CheckFile(userNameR, userNameL, lastHighestScoreR, lastHighestScoreL, highestScore);
         std::shared_ptr<Controller> controllerR = std::make_shared<RightController>();
         std::shared_ptr<Controller> controllerL = std::make_shared<LeftController>();
         Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
         Game game(static_cast<int>(kGridWidth), static_cast<int>(kGridHeight));
         game.Run(controllerR, controllerL, renderer, kMsPerFrame, difficultyLevelR, difficultyLevelL, gameDuration);
         file.AddData(userNameR, userNameL, game.GetScoreR(), game.GetScoreL());
-        if(game.GetWinner())
-            std::cout << "winner: Blue Snake\n";
-        else
-            std::cout << "winner: Green Snake\n";
-        std::cout << "elapsed time: " << gameDuration << "\n";
-        std::cout << "last highest score user R: " << lastHighestScoreR << "\n";
-        std::cout << "last highest score user L: " << lastHighestScoreL << "\n";
-        std::cout << "highest score: " << highestScore << "\n";
-        FinalScreen();
-        if(CheckIsQuit())
-            return;
+        FinalScreen(game.GetWinner(), game.GetScoreR(), game.GetScoreL());
+        if(isQuit) {
+            std::cout << "Game has terminated successfully!\n";
+            break;
+        }
     }
     return;
 }
 
 void Menu::InitialScreen() {
     std::cout << "Welcome to Snake Game\n";
+
     AskName();
     AskDifficultyLevel();
     return;
 }
 
-void Menu::FinalScreen() {
+void Menu::FinalScreen(int winner, int scoreR, int scoreL) {
+    std::cout << "Game Over!\n";
+    std::cout << "Winner is ";
+    // 1 represents right user and 2 left user, which are coming from the method in Game class GetWinner 
+    switch(winner) {
+        case 1:
+            std::cout << userNameR << " with the score of " << scoreR;
+            std::cout << " and " << userNameL << " has the score of " << scoreL << ".\n";
+            break;
+        case 2:
+            std::cout << userNameL << " with the score of " << scoreL;
+            std::cout << " and " << userNameR << " has the score of " << scoreR << ".\n";
+            break;
+        default:
+            break;
+    }
+    if(scoreR > highestScore)
+        std::cout << userNameR << " has made a new record!\n";
+    else if(scoreR > lastHighestScoreR)
+        std::cout << userNameR << " has made his/her highest score!\n";
+    if(scoreL > highestScore)
+        std::cout << userNameL << " has made a new record!\n";
+    else if(scoreL > lastHighestScoreL)
+        std::cout << userNameL << " has made his/her highest score!\n";
+    gameDuration *= 100;
+    gameDuration = static_cast<int>(gameDuration);
+    gameDuration /= 100.0;
+    std::cout << "Game duration was " << gameDuration << " seconds.\n";
     AskDifficultyLevel();
     return;
 }
@@ -105,12 +129,4 @@ bool Menu::CheckDifficultyLevel(int &difficultyLevel) {
         return true;
     std::cout << difficultyLevel << " is an invalid choice, please try again.\n";
     return false;
-}
-
-int Menu::CheckIsQuit() {
-    if(isQuit == 1) {
-        std::cout << "Game has terminated successfully!\n";
-        return 1;
-    }
-    return 0;
 }

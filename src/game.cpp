@@ -102,14 +102,16 @@ void Game::PlaceBonusFood() {
 }
 
 void Game::Update(bool &running, double &gameDuration) {
-  snakeR->Update(snakeL->head_x, snakeL->head_y, snakeL->body);  
-  snakeL->Update(snakeR->head_x, snakeR->head_y, snakeR->body);
+  // Checks if the game is over
   if(!(running && snakeR->alive && snakeL->alive)) {
+    running = false;
     endTime = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsedSeconds = endTime - startTime;
     gameDuration = elapsedSeconds.count();
     return;
   }
+  snakeR->Update(snakeL->head_x, snakeL->head_y, snakeL->body);  
+  snakeL->Update(snakeR->head_x, snakeR->head_y, snakeR->body);
 
   // snakeR's position
   int new_xR = static_cast<int>(snakeR->head_x);
@@ -160,14 +162,10 @@ void Game::Update(bool &running, double &gameDuration) {
   return;
 }
 
-int Game::GetScoreR() const { return scoreR; }
-int Game::GetScoreL() const { return scoreL; }
-int Game::GetSizeR() const { return snakeR->size; }
-int Game::GetSizeL() const { return snakeL->size; }
-
 int Game::GetWinner() const {
   // Winner is selected depending on score if head crash occurs
   if(snakeL->getHeadDie() || snakeR->getHeadDie())
-    return scoreR > scoreL ? 1 : 0;
+    return scoreR > scoreL ? 1 : 2;
   // Otherwise alive status
-  return snakeR->alive ? 1 : 0; }
+  return snakeR->alive ? 1 : 2;
+}
