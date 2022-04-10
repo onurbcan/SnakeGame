@@ -22,12 +22,12 @@ class Menu {
         void FinalScreen();
         std::string GetUserName();
         int CheckIfQuit();
-        int difficultyLevel{0};
 
     private:
         void AskName();
         void AskDifficultyLevel();
         std::string userName;
+        int difficultyLevel{0};
         int ifQuit{0};
         double gameDuration = 0.0;
 

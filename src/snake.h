@@ -46,15 +46,19 @@ class Snake {
     //std::cout << "move assignment operator\n";
   }
 
-  void Update(std::vector<SDL_Point> &otherSnakeBody);
+  void Update(float &otherSnakeHeadX, float &otherSnakeHeadY, std::vector<SDL_Point> &otherSnakeBody);
 
   void GrowBody();
   bool SnakeCell(int x, int y);
   int GetWinner();
 
+  void setSpeed(float speed) { this->speed = speed; }
+  float getSpeed() { return speed; }
+  bool getHeadDie() { return isHeadDie; }
+
   Direction direction = Direction::kUp;
 
-  float speed{0.16f};
+  
   int size{1};
   bool alive{true};
   float head_x;
@@ -63,11 +67,15 @@ class Snake {
 
  private:
   void UpdateHead();
-  void UpdateBody(SDL_Point &current_cell, SDL_Point &prev_cell, std::vector<SDL_Point> &otherSnakeBody);
+  void UpdateBody(SDL_Point &current_cell, SDL_Point &prev_cell, 
+          float &otherSnakeHeadX, float &otherSnakeHeadY, std::vector<SDL_Point> &otherSnakeBody);
 
   bool growing{false};
   int grid_width;
   int grid_height;
+
+  float speed{0.16f};
+  bool isHeadDie{false};
 };
 
 #endif

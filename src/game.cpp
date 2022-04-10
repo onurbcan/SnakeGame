@@ -29,9 +29,9 @@ void Game::Run(std::shared_ptr<Controller> const &controllerR,
   int frame_count = 0;
   bool running = true;
 
-  snakeR->speed = (diffLevel + 3) * 0.04; //gets values of 0.16, 0.20 and 0.24 
+  snakeR->setSpeed((diffLevel + 3) * 0.04); //has values of 0.16, 0.20 and 0.24 
                                         //depending on diff level
-  snakeL->speed = (diffLevel + 3) * 0.04; //gets values of 0.16, 0.20 and 0.24 
+  snakeL->setSpeed((diffLevel + 3) * 0.04); //has values of 0.16, 0.20 and 0.24 
                                         //depending on diff level
 
   startTime = std::chrono::system_clock::now();
@@ -108,8 +108,21 @@ void Game::Update(bool &running, double &gameDuration) {
     return;
   }
 
-  snakeL->Update(snakeR->body);
-  snakeR->Update(snakeL->body);
+  snakeR->Update(snakeL->head_x, snakeL->head_y, snakeL->body);
+  if(!(running && snakeR->alive && snakeL->alive)) {
+    endTime = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsedSeconds = endTime - startTime;
+    gameDuration = elapsedSeconds.count();
+    return;
+  }
+  
+  snakeL->Update(snakeR->head_x, snakeR->head_y, snakeR->body);
+  if(!(running && snakeR->alive && snakeL->alive)) {
+    endTime = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsedSeconds = endTime - startTime;
+    gameDuration = elapsedSeconds.count();
+    return;
+  }
 
   // snakeR's position
   int new_xR = static_cast<int>(snakeR->head_x);
@@ -165,4 +178,9 @@ int Game::GetScoreL() const { return scoreL; }
 int Game::GetSizeR() const { return snakeR->size; }
 int Game::GetSizeL() const { return snakeL->size; }
 
-int Game::GetWinner() const { return snakeR->alive ? 1 : 0; }
+int Game::GetWinner() const {
+  // Winner is selected depending on score if head crash occurs
+  if(snakeL->getHeadDie() || snakeR->getHeadDie())
+    return scoreR > scoreL ? 1 : 0;
+  // Otherwise alive status
+  return snakeR->alive ? 1 : 0; }
