@@ -1,13 +1,16 @@
 #include "file.h"
 
-void File::CheckFile(std::string &newUserName, int &lastHighestScore, int &highestScore) {
+void File::CheckFile(std::string &newUserNameR, std::string &newUserNameL, 
+                        int &lastHighestScoreR, int &lastHighestScoreL,
+                        int &highestScore) {
     dataFile.open("GameData.txt");
     if(dataFile) {
-        // file exists, read data inside
-        ReadFileData(newUserName, lastHighestScore, highestScore);
+        // File exists, read data inside
+        ReadFileData(newUserNameR, lastHighestScoreR, highestScore);
+        ReadFileData(newUserNameL, lastHighestScoreL, highestScore);
         CloseFile();
     } else {
-        // no file exists, create a new one
+        // No file exists, create a new one
         OpenFile();
         CloseFile();
     }
@@ -15,13 +18,14 @@ void File::CheckFile(std::string &newUserName, int &lastHighestScore, int &highe
 
 void File::OpenFile() {
     dataFile.open("GameData.txt");
-    //dataFile << "Writing this to a file.\n";
 }
 
 void File::ReadFileData(std::string &newUserName, int &lastHighestScore, int &highestScore) {
-    std::string userName;
-    int score;
+    std::string userName{""};
+    int score{0};
+    // Data in the file checked using user name and relevant scores are saved if available
     while(dataFile >> userName >> score) {
+        std::cout << userName << " " << score << "\n";
         if(newUserName.compare(userName) == 0)
             if(score > lastHighestScore)
                 lastHighestScore = score;
@@ -31,9 +35,11 @@ void File::ReadFileData(std::string &newUserName, int &lastHighestScore, int &hi
     }
 }
 
-void File::AddData(std::string &userName, int score) {
+void File::AddData(std::string &userNameR, std::string &userNameL, int scoreR, int scoreL) {
     dataFileAppend.open("GameData.txt", std::ios::app);
-    dataFileAppend << userName << " " << score << std::endl;
+    dataFileAppend << userNameR << " " << scoreR << "\n";
+    dataFileAppend << userNameL << " " << scoreL << "\n";
+    dataFileAppend.close();
 }
 
 void File::CloseFile() {

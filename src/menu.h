@@ -11,34 +11,27 @@
 #include "renderer.h"
 #include "SDL.h"
 
-enum Difficulties {
-    Quit, Easy, Medium, Hard
-};
-
 class Menu {
     public:
+        Menu() {}
         void GameLoop();
         void InitialScreen();
-        void FinalScreen();
-        std::string GetUserName();
-        int CheckIfQuit();
-        int difficultyLevel{0};
+        void FinalScreen(int winner, int scoreR, int scoreL);
+        std::string GetUserNameR() { return userNameR; }
+        std::string GetUserNameL() { return userNameL; }
 
     private:
         void AskName();
         void AskDifficultyLevel();
-        std::string userName;
-        int ifQuit{0};
-        double gameDuration = 0.0;
+        void PrintAskDifficultyLevelLines(std::string &userName);
+        bool CheckDifficultyLevel(int &difficultyLevel);
 
-        /*
-        std::shared_ptr<Controller> controller = std::make_shared<RightController>();
-        Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
-        Game game(static_cast<int>(kGridWidth), static_cast<int>(kGridHeight));
-        */
-        int lastHighestScore = 0; // sample last highest score
-        int highestScore = 0; // highest score of all users
-
+        std::string userNameR{""}, userNameL{""};
+        int difficultyLevelR{0}, difficultyLevelL{0};
+        int isQuit{0}; // Variable to check if the user wants to quit in menus
+        double gameDuration = 0.0; // Game duration after conversion to double type
+        int lastHighestScoreR = 0, lastHighestScoreL = 0; // Last highest score of user R and user L
+        int highestScore; // Highest score of all users
 };
 
 #endif

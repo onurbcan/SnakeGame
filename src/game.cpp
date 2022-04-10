@@ -18,9 +18,9 @@ Game::Game(int grid_width, int grid_height)
   scoreTime = std::chrono::system_clock::now();
 }
 
-void Game::Run(std::shared_ptr<Controller> const &controllerR, 
-               std::shared_ptr<Controller> const &controllerL, Renderer &renderer,
-               std::size_t target_frame_duration, int diffLevel, double &gameDuration) {
+void Game::Run(std::shared_ptr<Controller> const &controllerR, std::shared_ptr<Controller> const &controllerL, 
+                Renderer &renderer, std::size_t target_frame_duration,
+                int difficultyLevelR, int difficultyLevelL, double &gameDuration) {
 
   Uint32 title_timestamp = SDL_GetTicks();
   Uint32 frame_start;
@@ -29,17 +29,18 @@ void Game::Run(std::shared_ptr<Controller> const &controllerR,
   int frame_count = 0;
   bool running = true;
 
-  snakeR->speed = (diffLevel + 3) * 0.04; //gets values of 0.16, 0.20 and 0.24 
-                                        //depending on diff level
-  snakeL->speed = (diffLevel + 3) * 0.04; //gets values of 0.16, 0.20 and 0.24 
-                                        //depending on diff level
+  snakeR->setSpeed((difficultyLevelR + 3) * 0.04); // Speed for right user is set from the values of 0.16, 0.20 and 0.24 
+                                                  //depending on right user's difficulty level
+  snakeL->setSpeed((difficultyLevelL + 3) * 0.04); // Speed for left user is set from the values of 0.16, 0.20 and 0.24 
+                                        //depending on left user's difficulty level
 
-  startTime = std::chrono::system_clock::now();
+  startTime = std::chrono::system_clock::now(); // Beginning of the game
 
   while (running) {
     frame_start = SDL_GetTicks();
 
     // Input, Update, Render - the main game loop.
+    // SDL_Events are sent both controllerR and controllerL not to lose any event in any of the controller section
     SDL_Event e;
     SDL_PollEvent(&e);
     controllerR->HandleInput(running, snakeR, e);
@@ -101,15 +102,16 @@ void Game::PlaceBonusFood() {
 }
 
 void Game::Update(bool &running, double &gameDuration) {
+  // Checks if the game is over
   if(!(running && snakeR->alive && snakeL->alive)) {
+    running = false;
     endTime = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsedSeconds = endTime - startTime;
     gameDuration = elapsedSeconds.count();
     return;
   }
-
-  snakeL->Update(snakeR->body);
-  snakeR->Update(snakeL->body);
+  snakeR->Update(snakeL->head_x, snakeL->head_y, snakeL->body);  
+  snakeL->Update(snakeR->head_x, snakeR->head_y, snakeR->body);
 
   // snakeR's position
   int new_xR = static_cast<int>(snakeR->head_x);
@@ -121,9 +123,9 @@ void Game::Update(bool &running, double &gameDuration) {
 
   scoreTime = std::chrono::system_clock::now();
   std::chrono::duration<double> foodElapsedSeconds = scoreTime - beginTime;
-  foodDuration = foodElapsedSeconds.count();
+  bonusFoodDuration = foodElapsedSeconds.count();
 
-  if (foodDuration > 5.0) {
+  if (bonusFoodDuration > 5.0) {
     beginTime = std::chrono::system_clock::now();
     PlaceBonusFood();
   }
@@ -160,9 +162,10 @@ void Game::Update(bool &running, double &gameDuration) {
   return;
 }
 
-int Game::GetScoreR() const { return scoreR; }
-int Game::GetScoreL() const { return scoreL; }
-int Game::GetSizeR() const { return snakeR->size; }
-int Game::GetSizeL() const { return snakeL->size; }
-
-int Game::GetWinner() const { return snakeR->alive ? 1 : 0; }
+int Game::GetWinner() const {
+  // Winner is selected depending on score if head crash occurs
+  if(snakeL->getHeadDie() || snakeR->getHeadDie())
+    return scoreR > scoreL ? 1 : 2;
+  // Otherwise alive status
+  return snakeR->alive ? 1 : 2;
+}

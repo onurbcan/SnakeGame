@@ -4,6 +4,5 @@
 int main() {
   Menu menu;
   menu.GameLoop();
-
   return 0;
 }

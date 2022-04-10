@@ -9,88 +9,124 @@ void Menu::GameLoop() {
     std::size_t kGridHeight{32};
 
     InitialScreen();
-    if(CheckIfQuit())
+    if(isQuit) {
+        std::cout << "Game has terminated successfully!\n";
         return;
+    }
     File file;
-    file.CheckFile(userName, lastHighestScore, highestScore);
     while(true) {
+        file.CheckFile(userNameR, userNameL, lastHighestScoreR, lastHighestScoreL, highestScore);
         std::shared_ptr<Controller> controllerR = std::make_shared<RightController>();
         std::shared_ptr<Controller> controllerL = std::make_shared<LeftController>();
         Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
         Game game(static_cast<int>(kGridWidth), static_cast<int>(kGridHeight));
-        game.Run(controllerR, controllerL, renderer, kMsPerFrame, difficultyLevel, gameDuration);
-        file.AddData(userName, game.GetScoreR());
-        file.CloseFile();
-        if(game.GetWinner())
-            std::cout << "winner: Blue Snake\n";
-        else
-            std::cout << "winner: Green Snake\n";
-        std::cout << "elapsed time: " << gameDuration << "\n";
-        std::cout << "last highest score: " << lastHighestScore << "\n";
-        std::cout << "highest score: " << highestScore << "\n";
-        FinalScreen();
-        if(CheckIfQuit())
-            return;
+        game.Run(controllerR, controllerL, renderer, kMsPerFrame, difficultyLevelR, difficultyLevelL, gameDuration);
+        file.AddData(userNameR, userNameL, game.GetScoreR(), game.GetScoreL());
+        FinalScreen(game.GetWinner(), game.GetScoreR(), game.GetScoreL());
+        if(isQuit) {
+            std::cout << "Game has terminated successfully!\n";
+            break;
+        }
     }
-    /*
-    std::cout << "Game has terminated successfully!\n";
-    std::cout << "Score: " << game.GetScore() << "\n";
-    std::cout << "Size: " << game.GetSize() << "\n";
-    */
     return;
 }
 
 void Menu::InitialScreen() {
-    std::cout << "Welcome to Snake Game" << std::endl;
+    std::cout << "Welcome to Snake Game\n";
+
     AskName();
     AskDifficultyLevel();
     return;
 }
 
-void Menu::FinalScreen() {
-    // Problem here because of the game object !
-    //std::cout << userName << " has made " << game.GetScore() << " Score with the Size of " 
-    //    << game.GetSize() << std::endl;
+void Menu::FinalScreen(int winner, int scoreR, int scoreL) {
+    std::cout << "Game Over!\n";
+    std::cout << "Winner is ";
+    // 1 represents right user and 2 left user, which are coming from the method in Game class GetWinner 
+    switch(winner) {
+        case 1:
+            std::cout << userNameR << " with the score of " << scoreR;
+            std::cout << " and " << userNameL << " has the score of " << scoreL << ".\n";
+            break;
+        case 2:
+            std::cout << userNameL << " with the score of " << scoreL;
+            std::cout << " and " << userNameR << " has the score of " << scoreR << ".\n";
+            break;
+        default:
+            break;
+    }
+    if(scoreR > highestScore)
+        std::cout << userNameR << " has made a new record!\n";
+    else if(scoreR > lastHighestScoreR)
+        std::cout << userNameR << " has made his/her highest score!\n";
+    if(scoreL > highestScore)
+        std::cout << userNameL << " has made a new record!\n";
+    else if(scoreL > lastHighestScoreL)
+        std::cout << userNameL << " has made his/her highest score!\n";
+    gameDuration *= 100;
+    gameDuration = static_cast<int>(gameDuration);
+    gameDuration /= 100.0;
+    std::cout << "Game duration was " << gameDuration << " seconds.\n";
     AskDifficultyLevel();
     return;
 }
 
 void Menu::AskName() {
     while(true) {
-        userName = "";
-        std::cout << "Please enter your name (at least 4 characters):" << std::endl;
-        std::cin >> userName;
-        if (userName.size() >= 4)
+        std::cout << "Please enter first user's name (at least 4 characters):\n";
+        std::cin >> userNameR;
+        if (userNameR.size() >= 4)
             break;
-        std::cout << userName << " is an invalid name, please try again." << std::endl;
+        std::cout << userNameR << " is an invalid name, please try again.\n";
+    }
+    while(true) {
+        std::cout << "Please enter second user's name (at least 4 characters):\n";
+        std::cin >> userNameL;
+        if (userNameL.size() >= 4)
+            break;
+        std::cout << userNameL << " is an invalid name, please try again.\n";
     }
     return;
 }
 
 void Menu::AskDifficultyLevel() {
-    while(true) {
-        std::cout << "Please enter the difficulty level of the game (e.g: 2):\n";
-        std::cout << "Type 0 to quit.\n";
-        std::cout << "Easy (1)\n";
-        std::cout << "Medium (2)\n";
-        std::cout << "Hard (3)\n";
-        std::cin >> difficultyLevel;
-
-        if (difficultyLevel == 0 || difficultyLevel == 1 || difficultyLevel == 2 || difficultyLevel == 3)
+    std::string userName{""};
+    while(isQuit != 1) {
+        userName = "first";
+        PrintAskDifficultyLevelLines(userName);
+        std::cin >> difficultyLevelR;
+        // If submitted difficulty level is valid, while loop is broken
+        if(CheckDifficultyLevel(difficultyLevelR))
             break;
-        std::cout << difficultyLevel << " is an invalid choice, please try again." << std::endl;
     }
-    if(difficultyLevel == 0)
-        ifQuit = 1;
+    while(isQuit != 1) {
+        userName = "second";
+        PrintAskDifficultyLevelLines(userName);
+        std::cin >> difficultyLevelL;
+        // If submitted difficulty level is valid, while loop is broken
+        if(CheckDifficultyLevel(difficultyLevelL))
+            break;
+    }
     return;
 }
 
-int Menu::CheckIfQuit() {
-    if(ifQuit == 1) {
-        std::cout << "Game has terminated successfully!\n";
-        return 1;
-    }
-    return 0;
+void Menu::PrintAskDifficultyLevelLines(std::string &userName) {
+    std::cout << "Please enter the difficulty level for the " << userName << " user (e.g: 2):\n";
+    std::cout << "Type 0 to quit.\n";
+    std::cout << "Easy (1)\n";
+    std::cout << "Medium (2)\n";
+    std::cout << "Hard (3)\n";
+    return;
 }
 
-std::string Menu::GetUserName() { return userName; }
+bool Menu::CheckDifficultyLevel(int &difficultyLevel) {
+    if(difficultyLevel == 0) {
+        isQuit = 1;
+        return true;
+    }
+    // Each condition is written seperately to make sure a valid level is submitted
+    if(difficultyLevel == 1 || difficultyLevel == 2 || difficultyLevel == 3)
+        return true;
+    std::cout << difficultyLevel << " is an invalid choice, please try again.\n";
+    return false;
+}

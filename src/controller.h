@@ -17,11 +17,13 @@ class Controller : public ControllerABS {
                        Snake::Direction opposite) const;
 };
 
+// For the first user arrow keys are set as controller
 class RightController : public Controller {
  public:
   void HandleInput(bool &running, std::shared_ptr<Snake> &snake, SDL_Event e) const;
 };
 
+// For the second user 'w', 'a', 's' and 'd' keys are set as controller
 class LeftController : public Controller {
  public:
   void HandleInput(bool &running, std::shared_ptr<Snake> &snake, SDL_Event e) const;
