@@ -10,7 +10,8 @@ class File {
     public:
         void CheckFile(std::string &newUserNameR, std::string &newUserNameL, 
                         int &lastHighestScoreR, int &lastHighestScoreL, int &highestScore);
-        void AddData(std::string &userNameR, std::string &userNameL, int scoreR, int scoreL);
+        void AddDataSingle(std::string &userNameR, int scoreR);
+        void AddDataMulti(std::string &userNameR, std::string &userNameL, int scoreR, int scoreL);
     private:
         void OpenFile();
         void ReadFileData(std::string &newUserName, int &lastHighestScore, int &highestScore);

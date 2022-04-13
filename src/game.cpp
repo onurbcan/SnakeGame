@@ -2,10 +2,24 @@
 #include <iostream>
 #include "SDL.h"
 
-Game::Game(int grid_width, int grid_height)
+Game::Game(int grid_width, int grid_height, int difficultyLevelR)
     : engine(dev()),
       random_w(0, static_cast<int>(grid_width - 1)),
-      random_h(0, static_cast<int>(grid_height - 1)) {
+      random_h(0, static_cast<int>(grid_height - 1)),
+      difficultyLevelR(difficultyLevelR) {
+  snakeR = std::make_shared<Snake>(grid_width, grid_height);
+  
+  PlaceFood();
+  PlaceBonusFood();
+  scoreTime = std::chrono::system_clock::now();
+}
+
+Game::Game(int grid_width, int grid_height, int difficultyLevelR, int difficultyLevelL)
+    : engine(dev()),
+      random_w(0, static_cast<int>(grid_width - 1)),
+      random_h(0, static_cast<int>(grid_height - 1)),
+      difficultyLevelR(difficultyLevelR),
+      difficultyLevelL(difficultyLevelL) {
   snakeR = std::make_shared<Snake>(grid_width, grid_height);
   snakeL = std::make_shared<Snake>(grid_width, grid_height);
   
@@ -19,8 +33,7 @@ Game::Game(int grid_width, int grid_height)
 }
 
 void Game::Run(std::shared_ptr<Controller> const &controllerR, std::shared_ptr<Controller> const &controllerL, 
-                Renderer &renderer, std::size_t target_frame_duration,
-                int difficultyLevelR, int difficultyLevelL, double &gameDuration) {
+                Renderer &renderer, std::size_t target_frame_duration, double &gameDuration) {
 
   Uint32 title_timestamp = SDL_GetTicks();
   Uint32 frame_start;

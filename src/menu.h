@@ -21,11 +21,13 @@ class Menu {
         std::string GetUserNameL() { return userNameL; }
 
     private:
+        void AskGameMode();
         void AskName();
         void AskDifficultyLevel();
         void PrintAskDifficultyLevelLines(std::string &userName);
         bool CheckDifficultyLevel(int &difficultyLevel);
 
+        int gameMode{0};
         std::string userNameR{""}, userNameL{""};
         int difficultyLevelR{0}, difficultyLevelL{0};
         int isQuit{0}; // Variable to check if the user wants to quit in menus

@@ -25,7 +25,6 @@ void File::ReadFileData(std::string &newUserName, int &lastHighestScore, int &hi
     int score{0};
     // Data in the file checked using user name and relevant scores are saved if available
     while(dataFile >> userName >> score) {
-        std::cout << userName << " " << score << "\n";
         if(newUserName.compare(userName) == 0)
             if(score > lastHighestScore)
                 lastHighestScore = score;
@@ -35,7 +34,13 @@ void File::ReadFileData(std::string &newUserName, int &lastHighestScore, int &hi
     }
 }
 
-void File::AddData(std::string &userNameR, std::string &userNameL, int scoreR, int scoreL) {
+void File::AddDataSingle(std::string &userNameR, int scoreR) {
+    dataFileAppend.open("GameData.txt", std::ios::app);
+    dataFileAppend << userNameR << " " << scoreR << "\n";
+    dataFileAppend.close();
+}
+
+void File::AddDataMulti(std::string &userNameR, std::string &userNameL, int scoreR, int scoreL) {
     dataFileAppend.open("GameData.txt", std::ios::app);
     dataFileAppend << userNameR << " " << scoreR << "\n";
     dataFileAppend << userNameL << " " << scoreL << "\n";
