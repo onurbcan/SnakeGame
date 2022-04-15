@@ -46,7 +46,8 @@ class Snake {
     //std::cout << "move assignment operator\n";
   }
 
-  void Update(float &otherSnakeHeadX, float &otherSnakeHeadY, std::vector<SDL_Point> &otherSnakeBody);
+  void UpdateSingle();
+  void UpdateMulti(float &otherSnakeHeadX, float &otherSnakeHeadY, std::vector<SDL_Point> &otherSnakeBody);
 
   void GrowBody();
   bool SnakeCell(int x, int y);
@@ -67,7 +68,8 @@ class Snake {
 
  private:
   void UpdateHead();
-  void UpdateBody(SDL_Point &current_cell, SDL_Point &prev_cell, 
+  void UpdateBodySingle(SDL_Point &current_cell, SDL_Point &prev_cell);
+  void UpdateBodyMulti(SDL_Point &current_cell, SDL_Point &prev_cell, 
           float &otherSnakeHeadX, float &otherSnakeHeadY, std::vector<SDL_Point> &otherSnakeBody);
 
   bool growing{false};

@@ -1,37 +1,19 @@
 #include "menu.h"
 
 void Menu::GameLoop() {
-    std::size_t kFramesPerSecond{60};
-    std::size_t kMsPerFrame{1000 / kFramesPerSecond};
-    std::size_t kScreenWidth{640};
-    std::size_t kScreenHeight{640};
-    std::size_t kGridWidth{32};
-    std::size_t kGridHeight{32};
-    File file;
-
     while(true) {
         InitialScreen();
-        file.CheckFile(userNameR, userNameL, lastHighestScoreR, lastHighestScoreL, highestScore);
-        Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
-        std::shared_ptr<Controller> controllerR = std::make_shared<RightController>();
-        std::shared_ptr<Controller> controllerL = std::make_shared<LeftController>();
         switch(gameMode) {
         case 0:
             // Quit
             break;
         case 1:
             // Singleplayer
-            Game gameS(static_cast<int>(kGridWidth), static_cast<int>(kGridHeight), difficultyLevelR);
-            gameS.Run(controllerR, controllerL, renderer, kMsPerFrame, gameDuration);
-            file.AddDataSingle(userNameR, gameS.GetScoreR());
-            FinalScreen(gameS.GetWinner(), gameS.GetScoreR(), gameS.GetScoreL());
+            GameLoopSingle();
             break;
         case 2:
             // Multiplayer
-            Game gameM(static_cast<int>(kGridWidth), static_cast<int>(kGridHeight), difficultyLevelR, difficultyLevelL);
-            gameM.Run(controllerR, controllerL, renderer, kMsPerFrame, gameDuration);
-            file.AddDataMulti(userNameR, userNameL, gameM.GetScoreR(), gameM.GetScoreL());
-            FinalScreen(gameM.GetWinner(), gameM.GetScoreR(), gameM.GetScoreL());
+            GameLoopMulti();
             break;
         default:
             break;
@@ -44,11 +26,37 @@ void Menu::GameLoop() {
     return;
 }
 
+void Menu::GameLoopSingle() {
+    file.CheckFile(userNameR, userNameL, lastHighestScoreR, lastHighestScoreL, highestScore);
+    Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
+    std::shared_ptr<Controller> controllerR = std::make_shared<RightController>();
+    Game game(static_cast<int>(kGridWidth), static_cast<int>(kGridHeight), difficultyLevelR);
+    game.RunSingle(controllerR, renderer, kMsPerFrame, gameDuration);
+    file.AddDataSingle(userNameR, game.GetScoreR());
+    FinalScreenSingle(game.GetScoreR());
+    return;
+}
+
+void Menu::GameLoopMulti() {
+    file.CheckFile(userNameR, userNameL, lastHighestScoreR, lastHighestScoreL, highestScore);
+    Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
+    std::shared_ptr<Controller> controllerR = std::make_shared<RightController>();
+    std::shared_ptr<Controller> controllerL = std::make_shared<LeftController>();
+    Game game(static_cast<int>(kGridWidth), static_cast<int>(kGridHeight), difficultyLevelR, difficultyLevelL);
+    game.RunMulti(controllerR, controllerL, renderer, kMsPerFrame, gameDuration);
+    file.AddDataMulti(userNameR, userNameL, game.GetScoreR(), game.GetScoreL());
+    FinalScreenMulti(game.GetWinner(), game.GetScoreR(), game.GetScoreL());
+    return;
+}
+
 void Menu::InitialScreen() {
     std::cout << "Welcome to Snake Game\n";
     AskGameMode();
+    system("clear");
     AskName();
+    system("clear");
     AskDifficultyLevel();
+    system("clear");
     return;
 }
 
@@ -141,7 +149,6 @@ void Menu::AskDifficultyLevel() {
     default:
         break;
     }
-
     return;
 }
 
@@ -180,56 +187,52 @@ bool Menu::CheckDifficultyLevel(int &difficultyLevel) {
     return false;
 }
 
-void Menu::FinalScreen(int winner, int scoreR, int scoreL) {
+void Menu::FinalScreenSingle(int scoreR) {
     std::cout << "Game Over!\n";
-    switch (gameMode) {
-    case 0:
-        // Quit
-        break;
-    case 1:
-        // Singleplayer
-        std::cout << "You made the score of " << scoreR << ".\n";
-        if(scoreR > highestScore)
-            std::cout << userNameR << "You made a new record!\n";
-        else if(scoreR > lastHighestScoreR)
-            std::cout << userNameR << "You made your highest score!\n";
-        break;
-    case 2:
-        // Multiplayer
-        std::cout << "Winner is ";
-        // 1 represents right user and 2 left user, which are coming from the method in Game class GetWinner 
-        switch(winner) {
-            case 1:
-                std::cout << userNameR << " with the score of " << scoreR;
-                std::cout << " and " << userNameL << " has the score of " << scoreL << ".\n";
-                break;
-            case 2:
-                std::cout << userNameL << " with the score of " << scoreL;
-                std::cout << " and " << userNameR << " has the score of " << scoreR << ".\n";
-                break;
-            default:
-                break;
-        }
-        if(scoreR > highestScore)
-            std::cout << userNameR << " has made a new record!\n";
-        else if(scoreR > lastHighestScoreR)
-            std::cout << userNameR << " has made his/her highest score!\n";
-        if(scoreL > highestScore)
-            std::cout << userNameL << " has made a new record!\n";
-        else if(scoreL > lastHighestScoreL)
-            std::cout << userNameL << " has made his/her highest score!\n";
-        break;
-    default:
-        break;
+    // Singleplayer
+    std::cout << "You made the score of " << scoreR << ".\n";
+    if(scoreR > highestScore)
+        std::cout << "You made a new record!\n";
+    else if(scoreR > lastHighestScoreR)
+        std::cout << "You made your highest score!\n";
+    DisplayGameDuration();
+    return;
+}
+
+void Menu::FinalScreenMulti(int winner, int scoreR, int scoreL) {
+    std::cout << "Game Over!\n";
+    std::cout << "Winner is ";
+    // 1 represents right user and 2 left user, which are coming from the method in Game class GetWinner 
+    switch(winner) {
+        case 1:
+            std::cout << userNameR << " with the score of " << scoreR;
+            std::cout << " and " << userNameL << " has the score of " << scoreL << ".\n";
+            break;
+        case 2:
+            std::cout << userNameL << " with the score of " << scoreL;
+            std::cout << " and " << userNameR << " has the score of " << scoreR << ".\n";
+            break;
+        default:
+            break;
     }
+    if(scoreR > highestScore)
+        std::cout << userNameR << " has made a new record!\n";
+    else if(scoreR > lastHighestScoreR)
+        std::cout << userNameR << " has made his/her highest score!\n";
+    if(scoreL > highestScore)
+        std::cout << userNameL << " has made a new record!\n";
+    else if(scoreL > lastHighestScoreL)
+        std::cout << userNameL << " has made his/her highest score!\n";
+    DisplayGameDuration();
+    return;
+}
 
-
-
-
-
+void Menu::DisplayGameDuration() {
     gameDuration *= 100;
     gameDuration = static_cast<int>(gameDuration);
     gameDuration /= 100.0;
     std::cout << "Game duration was " << gameDuration << " seconds.\n";
+    // A line with stars is used to separate new and previous game screens
+    std::cout << "********************************\n";
     return;
 }
