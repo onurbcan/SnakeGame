@@ -10,19 +10,18 @@ Concepts that I have learned throughout [Udacity C++ Nanodegree Program](https:/
 
 0. This README file is updated to inform the user about changes and playing guidance.
 1. Menu screen or lines developed for a better and optimum user experience.
-* User can start, end or change settings of the game
-* User can get some information about game such as instructions (in the beginning) or game statistics (at the end).
-* User submits his/her name to be be called by name and to achieve his previous top score or scores by others.
-* User submits difficulty level (easy, medium or hard) of the game and snake moves with the relevant speed.
-* After each game, game duration is displayed as well as score(s).
-* At the end of each game user can start a new game or simply quit. 
+  * User can start, end or change settings of the game.
+  * More information about the game such as instructions (in the beginning) or game statistics (at the end) is now available.
+  * User submits his/her name to be be called by name and to achieve his previous top score or scores by others.
+  * Difficulty level (easy, medium or hard) of the game is now choseable by the user and snake moves with the relevant speed throughout the game.
+  * After each game, game duration is displayed as well as score(s) and user can start a new game or simply quit. 
 2. Scores from previous plays or users are saved into GameData.txt file after each game and this file (if available) is read in the beginning of each game to compare the scores with the current game or user/users. If there is no such game data file under build folder, it is created and scores are written at the end of the game with usernames.
 3. Game is also available as multiplayer. First user plays the game as usual with arrow keys and second one with A,S, D and W keys.
-* First user has a snake with blue color and commands it using right controllers (arrow keys). Second user has a snake with green color and commands it using left controllers (A, S, D and W keys).
-* Both users collect food with yellow color and make score to his/her account.
-* If a user's head crash to his/her own body or his/her opponent's body, this user loses the game and other user wins.
-* If users' heads crash each other, winner is chosen by score. If their scores are equal, there is no winner for that game.
-4. Game is now more challenging with an additional food which is called bonus food. It is colorful by continuosly changing colors to give an idea about its limited time. After eaten or each 5 seconds, bonus food is placed somewhere else on the grid randomly. Unlike the regular food, bonus food does not make snake longer but gives points same way.
+  * First user has a snake with blue color and commands it using right controllers (arrow keys). Second user has a snake with green color and commands it using left controllers (A, S, D and W keys).
+  * Both users eat food with yellow color and make score to his/her account.
+  * If a user's head crash to his/her own body or his/her opponent's body, this user loses the game and other user wins.
+  * If users' heads crash each other, winner is chosen by score. If their scores are equal, there is no winner for that game.
+4. Game is now more challenging with an additional food which is called Bonus Food. It is colorful by continuosly changing colors to give an idea about its limited time. After eaten or each 5 seconds, it is placed somewhere else on the grid randomly. Unlike the regular food, Bonus Food does not make snake longer but earns points same way.
 
 ## Project Criteria Addressed
 
@@ -40,7 +39,7 @@ Concepts that I have learned throughout [Udacity C++ Nanodegree Program](https:/
   * Criterion 8: controller.h
   * Criterion 9: snake.h
   * Criterion 11: game.h, game.cpp, menu.cpp
-Memory Management
+* Memory Management
   * Criterion 1: menu.cpp, file.cpp, game.cpp, snake.cpp
   * Criterion 2: menu.cpp
 
