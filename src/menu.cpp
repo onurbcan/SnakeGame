@@ -34,6 +34,9 @@ void Menu::GameLoopSingle() {
     game.RunSingle(controllerR, renderer, kMsPerFrame, gameDuration);
     file.AddDataSingle(userNameR, game.GetScoreR());
     FinalScreenSingle(game.GetScoreR());
+    renderer.~Renderer();
+    controllerR.reset();
+    game.~Game();
     return;
 }
 
@@ -46,6 +49,10 @@ void Menu::GameLoopMulti() {
     game.RunMulti(controllerR, controllerL, renderer, kMsPerFrame, gameDuration);
     file.AddDataMulti(userNameR, userNameL, game.GetScoreR(), game.GetScoreL());
     FinalScreenMulti(game.GetWinner(), game.GetScoreR(), game.GetScoreL());
+    renderer.~Renderer();
+    controllerR.reset();
+    controllerL.reset();
+    game.~Game();
     return;
 }
 
@@ -97,6 +104,7 @@ void Menu::AskName() {
                 break;
             std::cout << userNameR << " is an invalid name, please try again.\n";
         }
+        system("clear");
         while(true) {
             std::cout << "Please enter second user's name (at least 4 characters):\n";
             std::cin >> userNameL;
@@ -137,6 +145,7 @@ void Menu::AskDifficultyLevel() {
             if(CheckDifficultyLevel(difficultyLevelR))
                 break;
         }
+        system("clear");
         while(isQuit != 1) {
             userName = "second";
             PrintAskDifficultyLevelLines(userName);
@@ -162,7 +171,7 @@ void Menu::PrintAskDifficultyLevelLines(std::string &userName) {
         // Singleplayer
         break;
     case 2:
-        std::cout << "Please enter the difficulty level for " << userName << " (e.g: 2):\n";
+        std::cout << "Please enter the difficulty level for " << userName << " user (e.g: 2):\n";
         // Multiplayer
         break;
     default:

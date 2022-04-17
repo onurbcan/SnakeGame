@@ -23,10 +23,10 @@ Game::Game(int grid_width, int grid_height, int difficultyLevelR, int difficulty
   snakeR = std::make_shared<Snake>(grid_width, grid_height);
   snakeL = std::make_shared<Snake>(grid_width, grid_height);
   
-  snakeL->head_x = (grid_width / 4);
-  snakeL->head_y = (grid_height / 4);
+  // To start snakes in different positions on the grid but near, also on the opposite directions
+  snakeL->head_x = snakeR->head_x - 1;
   snakeL->direction = Snake::Direction::kDown;
-  
+
   PlaceFoodMulti();
   PlaceBonusFoodMulti();
   scoreTime = std::chrono::system_clock::now();
@@ -42,7 +42,7 @@ void Game::RunSingle(std::shared_ptr<Controller> const &controllerR,
   int frame_count = 0;
   bool running = true;
 
-  snakeR->setSpeed((difficultyLevelR + 3) * 0.04); // Speed for right user is set from the values of 0.16, 0.20 and 0.24 
+  snakeR->SetSpeed((difficultyLevelR + 3) * 0.04); // Speed for right user is set from the values of 0.16, 0.20 and 0.24 
                                                   //depending on right user's difficulty level
 
   startTime = std::chrono::system_clock::now(); // Beginning of the game
@@ -91,9 +91,9 @@ void Game::RunMulti(std::shared_ptr<Controller> const &controllerR, std::shared_
   int frame_count = 0;
   bool running = true;
 
-  snakeR->setSpeed((difficultyLevelR + 3) * 0.04); // Speed for right user is set from the values of 0.16, 0.20 and 0.24 
+  snakeR->SetSpeed((difficultyLevelR + 3) * 0.04); // Speed for right user is set from the values of 0.16, 0.20 and 0.24 
                                                   //depending on right user's difficulty level
-  snakeL->setSpeed((difficultyLevelL + 3) * 0.04); // Speed for left user is set from the values of 0.16, 0.20 and 0.24 
+  snakeL->SetSpeed((difficultyLevelL + 3) * 0.04); // Speed for left user is set from the values of 0.16, 0.20 and 0.24 
                                         //depending on left user's difficulty level
 
   startTime = std::chrono::system_clock::now(); // Beginning of the game
@@ -299,7 +299,7 @@ void Game::UpdateMulti(bool &running, double &gameDuration) {
 
 int Game::GetWinner() const {
   // Winner is selected depending on score if head crash occurs
-  if(snakeL->getHeadDie() || snakeR->getHeadDie())
+  if(snakeL->GetHeadDie() || snakeR->GetHeadDie())
     return scoreR > scoreL ? 1 : 2;
   // Otherwise alive status
   return snakeR->alive ? 1 : 2;
