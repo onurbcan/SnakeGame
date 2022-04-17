@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include <random>
+#include <string>
 #include "SDL.h"
 #include "snake.h"
 
@@ -30,7 +31,7 @@ class Renderer {
   const std::size_t grid_width;
   const std::size_t grid_height;
 
-  // random device and variables initialezed to generate random colors for bonus food
+  // Random device and variables initialezed to generate random colors for bonus food
   std::random_device dev;
   std::mt19937 engine;
   std::uniform_int_distribution<Uint8> random_r;

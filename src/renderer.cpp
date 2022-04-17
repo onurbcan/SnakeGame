@@ -1,6 +1,4 @@
 #include "renderer.h"
-#include <iostream>
-#include <string>
 
 Renderer::Renderer(const std::size_t screen_width,
                    const std::size_t screen_height,

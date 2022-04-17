@@ -3,6 +3,7 @@
 void Menu::GameLoop() {
     while(true) {
         InitialScreen();
+        file.CheckFile(userNameR, userNameL, lastHighestScoreR, lastHighestScoreL, highestScore);
         switch(gameMode) {
         case 0:
             // Quit
@@ -27,7 +28,6 @@ void Menu::GameLoop() {
 }
 
 void Menu::GameLoopSingle() {
-    file.CheckFile(userNameR, userNameL, lastHighestScoreR, lastHighestScoreL, highestScore);
     Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
     std::shared_ptr<Controller> controllerR = std::make_shared<RightController>();
     Game game(static_cast<int>(kGridWidth), static_cast<int>(kGridHeight), difficultyLevelR);
@@ -41,7 +41,6 @@ void Menu::GameLoopSingle() {
 }
 
 void Menu::GameLoopMulti() {
-    file.CheckFile(userNameR, userNameL, lastHighestScoreR, lastHighestScoreL, highestScore);
     Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
     std::shared_ptr<Controller> controllerR = std::make_shared<RightController>();
     std::shared_ptr<Controller> controllerL = std::make_shared<LeftController>();
@@ -120,7 +119,7 @@ void Menu::AskName() {
 }
 
 void Menu::AskDifficultyLevel() {
-    std::string userName{""};
+    std::string userName{""}, inputText{""};
     switch(gameMode) {
     case 0:
         // Quit
@@ -153,6 +152,13 @@ void Menu::AskDifficultyLevel() {
             // If submitted difficulty level is valid, while loop is broken
             if(CheckDifficultyLevel(difficultyLevelL))
                 break;
+        }
+        system("clear");
+        while(!(isQuit == 1 || inputText.size() > 0)) {
+            std::cout << "First user plays with blue snake by commanding with arrow keys and\n";
+            std::cout << "second user plays with green snake by commanding with a, s, d and w keys.\n";
+            std::cout << "Have fun! Please type anything to continue to the game.\n";
+            std::cin >> inputText;
         }
         break;
     default:
@@ -210,15 +216,20 @@ void Menu::FinalScreenSingle(int scoreR) {
 
 void Menu::FinalScreenMulti(int winner, int scoreR, int scoreL) {
     std::cout << "Game Over!\n";
-    std::cout << "Winner is ";
-    // 1 represents right user and 2 left user, which are coming from the method in Game class GetWinner 
+    // 0 represents no winner case, 1 for right user and 2 for left user, 
+    // which are coming from the method in Game class GetWinner 
     switch(winner) {
+        case 0:
+            std::cout << "There is no winner in this game. ";
+            std::cout << userNameR << " made the score of " << scoreR;
+            std::cout << " and " << userNameL << " made the score of " << scoreL << ".\n";
+            break;
         case 1:
-            std::cout << userNameR << " with the score of " << scoreR;
+            std::cout << "Winner is " << userNameR << " with the score of " << scoreR;
             std::cout << " and " << userNameL << " has the score of " << scoreL << ".\n";
             break;
         case 2:
-            std::cout << userNameL << " with the score of " << scoreL;
+            std::cout << "Winner is " << userNameL << " with the score of " << scoreL;
             std::cout << " and " << userNameR << " has the score of " << scoreR << ".\n";
             break;
         default:

@@ -4,12 +4,12 @@
 #include <iostream>
 #include <string>
 #include <memory>
+#include "SDL.h"
 #include "game.h"
 #include "snake.h"
 #include "file.h"
 #include "controller.h"
 #include "renderer.h"
-#include "SDL.h"
 
 class Menu {
     public:

@@ -1,7 +1,9 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
+#include <iostream>
 #include <memory>
+#include "SDL.h"
 #include "snake.h"
 
 class ControllerABS {
@@ -23,7 +25,7 @@ class RightController : public Controller {
   void HandleInput(bool &running, std::shared_ptr<Snake> &snake, SDL_Event e) const;
 };
 
-// For the second user 'w', 'a', 's' and 'd' keys are set as controller
+// For the second user 'a', 's', 'd' and 'w' keys are set as controller
 class LeftController : public Controller {
  public:
   void HandleInput(bool &running, std::shared_ptr<Snake> &snake, SDL_Event e) const;

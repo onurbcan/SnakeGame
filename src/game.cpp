@@ -1,6 +1,4 @@
 #include "game.h"
-#include <iostream>
-#include "SDL.h"
 
 Game::Game(int grid_width, int grid_height, int difficultyLevelR)
     : engine(dev()),
@@ -198,7 +196,6 @@ void Game::PlaceBonusFoodMulti() {
 void Game::UpdateSingle(bool &running, double &gameDuration) {
   // Checks if the game is over
   if(!(running && snakeR->alive)) {
-    running = false;
     endTime = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsedSeconds = endTime - startTime;
     gameDuration = elapsedSeconds.count();
@@ -239,7 +236,6 @@ void Game::UpdateSingle(bool &running, double &gameDuration) {
 void Game::UpdateMulti(bool &running, double &gameDuration) {
   // Checks if the game is over
   if(!(running && snakeR->alive && snakeL->alive)) {
-    running = false;
     endTime = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsedSeconds = endTime - startTime;
     gameDuration = elapsedSeconds.count();
@@ -299,8 +295,12 @@ void Game::UpdateMulti(bool &running, double &gameDuration) {
 
 int Game::GetWinner() const {
   // Winner is selected depending on score if head crash occurs
-  if(snakeL->GetHeadDie() || snakeR->GetHeadDie())
-    return scoreR > scoreL ? 1 : 2;
+  if(snakeL->GetHeadDie() || snakeR->GetHeadDie()) {
+    if(scoreR == scoreL)
+      return 0;
+    else
+      return scoreR > scoreL ? 1 : 2;
+  }
   // Otherwise alive status
   return snakeR->alive ? 1 : 2;
 }
