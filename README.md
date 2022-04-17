@@ -1,14 +1,51 @@
-# CPPND: Capstone Snake Game Example
+# Snake Game
 
-This is a starter repo for the Capstone project in the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213). The code for this repo was inspired by [this](https://codereview.stackexchange.com/questions/212296/snake-game-in-c-with-sdl) excellent StackOverflow post and set of responses.
+I modified starter codes in the [CppND-Capstone-Snake-Game](https://github.com/udacity/CppND-Capstone-Snake-Game) GitHub repository to add some additional functionality and make changes relevant to C++ Programming, OOP (Object Oriented Programming) and Memory Management standards.
 
 <img src="snake_game.gif"/>
 
-The Capstone Project gives you a chance to integrate what you've learned throughout this program. This project will become an important part of your portfolio to share with current and future colleagues and employers.
+Concepts that I have learned throughout [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213) were integrated to this Capstone Project by extending Snake game and applying criteria addressed below.
 
-In this project, you can build your own C++ application or extend this Snake game, following the principles you have learned throughout this Nanodegree Program. This project will demonstrate that you can independently create applications using a wide range of C++ features.
+## Changes Implemented
+
+0. This README file is updated to inform the user about changes and playing guidance.
+1. Menu screen or lines developed for a better and optimum user experience.
+* User can start, end or change settings of the game
+* User can get some information about game such as instructions (in the beginning) or game statistics (at the end).
+* User submits his/her name to be be called by name and to achieve his previous top score or scores by others.
+* User submits difficulty level (easy, medium or hard) of the game and snake moves with the relevant speed.
+* After each game, game duration is displayed as well as score(s).
+* At the end of each game user can start a new game or simply quit. 
+2. Scores from previous plays or users are saved into GameData.txt file after each game and this file (if available) is read in the beginning of each game to compare the scores with the current game or user/users. If there is no such game data file under build folder, it is created and scores are written at the end of the game with usernames.
+3. Game is also available as multiplayer. First user plays the game as usual with arrow keys and second one with A,S, D and W keys.
+* First user has a snake with blue color and commands it using right controllers (arrow keys). Second user has a snake with green color and commands it using left controllers (A, S, D and W keys).
+* Both users collect food with yellow color and make score to his/her account.
+* If a user's head crash to his/her own body or his/her opponent's body, this user loses the game and other user wins.
+* If users' heads crash each other, winner is chosen by score. If their scores are equal, there is no winner for that game.
+4. Game is now more challenging with an additional food which is called bonus food. It is colorful by continuosly changing colors to give an idea about its limited time. After eaten or each 5 seconds, bonus food is placed somewhere else on the grid randomly. Unlike the regular food, bonus food does not make snake longer but gives points same way.
+
+## Project Criteria Addressed
+
+* Loops, Functions, I/O
+  * Criterion 1: menu.cpp
+  * Criterion 2: file.cpp
+  * Criterion 3: menu.cpp
+* Object Oriented Programming
+  * Criterion 1: menu.cpp
+  * Criterion 2: menu.h, file.h, game.h, snake.h
+  * Criterion 3: game.cpp
+  * Criterion 4: menu.h, file.h
+  * Criterion 5: menu.h, file.h, game.h
+  * Criterion 6: controller.h
+  * Criterion 8: controller.h
+  * Criterion 9: snake.h
+  * Criterion 11: game.h, game.cpp, menu.cpp
+Memory Management
+  * Criterion 1: menu.cpp, file.cpp, game.cpp, snake.cpp
+  * Criterion 2: menu.cpp
 
 ## Dependencies for Running Locally
+
 * cmake >= 3.7
   * All OSes: [click here for installation instructions](https://cmake.org/install/)
 * make >= 4.1 (Linux, Mac), 3.81 (Windows)
@@ -30,17 +67,3 @@ In this project, you can build your own C++ application or extend this Snake gam
 3. Compile: `cmake .. && make`
 4. Run it: `./SnakeGame`.
 
-
-## CC Attribution-ShareAlike 4.0 International
-
-
-Shield: [![CC BY-SA 4.0][cc-by-sa-shield]][cc-by-sa]
-
-This work is licensed under a
-[Creative Commons Attribution-ShareAlike 4.0 International License][cc-by-sa].
-
-[![CC BY-SA 4.0][cc-by-sa-image]][cc-by-sa]
-
-[cc-by-sa]: http://creativecommons.org/licenses/by-sa/4.0/
-[cc-by-sa-image]: https://licensebuttons.net/l/by-sa/4.0/88x31.png
-[cc-by-sa-shield]: https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg
