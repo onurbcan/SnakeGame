@@ -1,8 +1,6 @@
 #include "snake.h"
-#include <cmath>
-#include <iostream>
 
-void Snake::Update(float &otherSnakeHeadX, float &otherSnakeHeadY, std::vector<SDL_Point> &otherSnakeBody) {
+void Snake::UpdateSingle() {
   SDL_Point prev_cell{
       static_cast<int>(head_x),
       static_cast<int>(
@@ -15,7 +13,24 @@ void Snake::Update(float &otherSnakeHeadX, float &otherSnakeHeadY, std::vector<S
   // Update all of the body vector items if the snake head has moved to a new
   // cell.
   if (current_cell.x != prev_cell.x || current_cell.y != prev_cell.y) {
-    UpdateBody(current_cell, prev_cell, otherSnakeHeadX, otherSnakeHeadY, otherSnakeBody);
+    UpdateBodySingle(current_cell, prev_cell);
+  }
+}
+
+void Snake::UpdateMulti(float &otherSnakeHeadX, float &otherSnakeHeadY, std::vector<SDL_Point> &otherSnakeBody) {
+  SDL_Point prev_cell{
+      static_cast<int>(head_x),
+      static_cast<int>(
+          head_y)};  // We first capture the head's cell before updating.
+  UpdateHead();
+  SDL_Point current_cell{
+      static_cast<int>(head_x),
+      static_cast<int>(head_y)};  // Capture the head's cell after updating.
+
+  // Update all of the body vector items if the snake head has moved to a new
+  // cell.
+  if (current_cell.x != prev_cell.x || current_cell.y != prev_cell.y) {
+    UpdateBodyMulti(current_cell, prev_cell, otherSnakeHeadX, otherSnakeHeadY, otherSnakeBody);
   }
 }
 
@@ -43,7 +58,27 @@ void Snake::UpdateHead() {
   head_y = fmod(head_y + grid_height, grid_height);
 }
 
-void Snake::UpdateBody(SDL_Point &current_head_cell, SDL_Point &prev_head_cell, 
+void Snake::UpdateBodySingle(SDL_Point &current_head_cell, SDL_Point &prev_head_cell) {
+  // Add previous head location to vector
+  body.push_back(prev_head_cell);
+
+  if (!growing) {
+    // Remove the tail from the vector.
+    body.erase(body.begin());
+  } else {
+    growing = false;
+    size++;
+  }
+
+  // Check if the snake has died, checking to its own body
+  for (auto const &item : body) {
+    if (current_head_cell.x == item.x && current_head_cell.y == item.y) {
+      alive = false;
+    }
+  }
+}
+
+void Snake::UpdateBodyMulti(SDL_Point &current_head_cell, SDL_Point &prev_head_cell, 
         float &otherSnakeHeadX, float &otherSnakeHeadY, std::vector<SDL_Point> &otherSnakeBody) {
   // Add previous head location to vector
   body.push_back(prev_head_cell);

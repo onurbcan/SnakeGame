@@ -4,77 +4,73 @@
 #include <vector>
 #include <memory>
 #include <iostream>
+#include <cmath>
 #include "SDL.h"
 
 class Snake {
  public:
   enum class Direction { kUp, kDown, kLeft, kRight };
 
+  // Constructor
   Snake() {}
-
+  
+  // Constructor with parameters
   Snake(int &grid_width, int &grid_height)
       : grid_width(grid_width),
         grid_height(grid_height),
         head_x(grid_width / 2),
         head_y(grid_height / 2) {}
-
-  // copy constructor
-  Snake(const Snake &other) {
-    //std::cout << "copy constructor\n";
-  }
-
-  // destructor
+  
+  // Destructor
   ~Snake() {
-    //std::cout << "destructor\n";
   }
 
-  // copy assignment operator
+  // Copy constructor
+  Snake(const Snake &other) {
+
+  }
+
+  // Copy assignment operator
   Snake &operator=(const Snake &other) {
-    //std::cout << "copy assignment operator\n";
     return *this;
   }
 
-  // move constructor
+  // Move constructor
   Snake(Snake &&other) {
-    this->direction = Direction::kDown;
-    //std::cout << "move constructor\n";
+
   }
 
-  // move assignment operator
+  // Move assignment operator
   Snake &operator=(Snake &&other) {
-    this->direction = Direction::kDown;
-    //std::cout << "move assignment operator\n";
+    return *this;
   }
 
-  void Update(float &otherSnakeHeadX, float &otherSnakeHeadY, std::vector<SDL_Point> &otherSnakeBody);
-
+  void UpdateSingle();
+  void UpdateMulti(float &otherSnakeHeadX, float &otherSnakeHeadY, std::vector<SDL_Point> &otherSnakeBody);
   void GrowBody();
   bool SnakeCell(int x, int y);
   int GetWinner();
+  void SetSpeed(float speed) { this->speed = speed; }
+  float GetSpeed() { return speed; }
+  bool GetHeadDie() { return isHeadDie; }
 
-  void setSpeed(float speed) { this->speed = speed; }
-  float getSpeed() { return speed; }
-  bool getHeadDie() { return isHeadDie; }
-
-  Direction direction = Direction::kUp;
-
-  
   int size{1};
   bool alive{true};
   float head_x;
   float head_y;
+  Direction direction = Direction::kUp;
   std::vector<SDL_Point> body;
 
  private:
   void UpdateHead();
-  void UpdateBody(SDL_Point &current_cell, SDL_Point &prev_cell, 
+  void UpdateBodySingle(SDL_Point &current_cell, SDL_Point &prev_cell);
+  void UpdateBodyMulti(SDL_Point &current_cell, SDL_Point &prev_cell, 
           float &otherSnakeHeadX, float &otherSnakeHeadY, std::vector<SDL_Point> &otherSnakeBody);
 
-  bool growing{false};
   int grid_width;
   int grid_height;
-
-  float speed{0.16f};
+  bool growing{false};
+  float speed{0.16f}; // Speed set initially to the easy level's speed
   bool isHeadDie{false};
 };
 

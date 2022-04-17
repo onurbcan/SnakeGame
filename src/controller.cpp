@@ -1,7 +1,4 @@
 #include "controller.h"
-#include <iostream>
-#include "SDL.h"
-#include "snake.h"
 
 void RightController::HandleInput(bool &running, std::shared_ptr<Snake> &snake, SDL_Event e) const {
     if (e.type == SDL_QUIT) {

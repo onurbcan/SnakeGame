@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <iostream>
 #include <random>
 #include <chrono>
 #include <memory>
@@ -12,10 +13,13 @@
 class Game {
  public:
   Game() {}
-  Game(int grid_width, int grid_height);
-  void Run(std::shared_ptr<Controller> const &controllerR, 
+  Game(int grid_width, int grid_height, int difficultyLevelR);
+  Game(int grid_width, int grid_height, int difficultyLevelR, int difficultyLevelL);
+  void RunSingle(std::shared_ptr<Controller> const &controllerR, 
+           Renderer &renderer, std::size_t target_frame_duration, double &gameDuration);
+  void RunMulti(std::shared_ptr<Controller> const &controllerR, 
            std::shared_ptr<Controller> const &controllerL, Renderer &renderer,
-           std::size_t target_frame_duration, int difficultyLevelR, int difficultyLevelL, double &gameDuration);
+           std::size_t target_frame_duration, double &gameDuration); 
   int GetScoreR() const { return scoreR; }
   int GetScoreL() const { return scoreL; }
   int GetSizeR() const { return snakeR->size; }
@@ -40,13 +44,18 @@ class Game {
   std::chrono::time_point<std::chrono::system_clock> beginTime = std::chrono::system_clock::now(), scoreTime; // Time
                   // variables for the time length detection of bonus food, 5 seconds rule 
   
+  int difficultyLevelR{0};
+  int difficultyLevelL{0};
   int scoreR{0}; // Score for the right snake
   int scoreL{0}; // Score for the left snake
   double bonusFoodDuration; // Calculated time for the bonus food after conversion to double type
 
-  void PlaceFood(); 
-  void PlaceBonusFood();
-  void Update(bool &running, double &gameDuration);
+  void PlaceFoodSingle(); 
+  void PlaceBonusFoodSingle();
+  void PlaceFoodMulti(); 
+  void PlaceBonusFoodMulti();
+  void UpdateSingle(bool &running, double &gameDuration);
+  void UpdateMulti(bool &running, double &gameDuration);
 };
 
 #endif

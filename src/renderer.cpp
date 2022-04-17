@@ -1,6 +1,4 @@
 #include "renderer.h"
-#include <iostream>
-#include <string>
 
 Renderer::Renderer(const std::size_t screen_width,
                    const std::size_t screen_height,
@@ -42,7 +40,60 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render(std::shared_ptr<Snake> const snakeR, std::shared_ptr<Snake> const snakeL, 
+void Renderer::RenderSingle(std::shared_ptr<Snake> const snakeR,
+                        SDL_Point const &food, SDL_Point const &bonusFood) {
+  SDL_Rect block;
+  block.w = screen_width / grid_width;
+  block.h = screen_height / grid_height;
+
+  // Clear screen
+  SDL_SetRenderDrawColor(sdl_renderer, 0x1E, 0x1E, 0x1E, 0xFF);
+  SDL_RenderClear(sdl_renderer);
+
+  // Render food
+  // yellow color
+  SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xCC, 0x00, 0xFF);
+  block.x = food.x * block.w;
+  block.y = food.y * block.h;
+  SDL_RenderFillRect(sdl_renderer, &block);
+
+  // Render bonus food
+  // color for bonus food changes each time randomly to give an idea about its limited time
+  SDL_SetRenderDrawColor(sdl_renderer, random_r(engine), random_g(engine), random_b(engine), 0xFF);
+  block.x = bonusFood.x * block.w;
+  block.y = bonusFood.y * block.h;
+  SDL_RenderFillRect(sdl_renderer, &block);
+
+  // Render snakeR's body
+  // using blue color
+  if (snakeR->alive) {
+    SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x7A, 0xCC, 0xFF);
+  } else {
+    SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);
+  }
+  for (SDL_Point const &point : snakeR->body) {
+    block.x = point.x * block.w;
+    block.y = point.y * block.h;
+    SDL_RenderFillRect(sdl_renderer, &block);
+  }
+
+  // Render snakeR's head
+  // using turquoise color
+  block.x = static_cast<int>(snakeR->head_x) * block.w;
+  block.y = static_cast<int>(snakeR->head_y) * block.h;
+  if (snakeR->alive) {
+    SDL_SetRenderDrawColor(sdl_renderer, 0x30, 0xD5, 0xC8, 0xFF);
+  } else {
+    SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);
+  }
+
+  SDL_RenderFillRect(sdl_renderer, &block);
+
+  // Update Screen
+  SDL_RenderPresent(sdl_renderer);
+}
+
+void Renderer::RenderMulti(std::shared_ptr<Snake> const snakeR, std::shared_ptr<Snake> const snakeL, 
                         SDL_Point const &food, SDL_Point const &bonusFood) {
   SDL_Rect block;
   block.w = screen_width / grid_width;
@@ -120,7 +171,13 @@ void Renderer::Render(std::shared_ptr<Snake> const snakeR, std::shared_ptr<Snake
   SDL_RenderPresent(sdl_renderer);
 }
 
-void Renderer::UpdateWindowTitle(int scoreR, int scoreL, int fps) {
+void Renderer::UpdateWindowTitleSingle(int scoreR, int fps) {
+  std::string title{"Score: " + std::to_string(scoreR) + 
+                        " FPS: " + std::to_string(fps)};
+  SDL_SetWindowTitle(sdl_window, title.c_str());
+}
+
+void Renderer::UpdateWindowTitleMulti(int scoreR, int scoreL, int fps) {
   std::string title{"Blue Snake Score: " + std::to_string(scoreR) + 
                       " - Green Snake Score: " + std::to_string(scoreL) + 
                         " FPS: " + std::to_string(fps)};
